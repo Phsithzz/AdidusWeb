@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as products from "../function/product.js";
 import Navbar from "../components/Navbar.jsx";
 import { FaRegHeart } from "react-icons/fa";
@@ -48,9 +48,7 @@ const ProductDetail = () => {
 
   const [selectedVariant,setSelectedVariant] = useState(null)
 
-
-  const [message,setMessage] = useState(null)
-
+  const navigate = useNavigate()
 
   const RandomProduct = (array) => {
     return array
@@ -77,7 +75,7 @@ const ProductDetail = () => {
   loadData();
 }, [id]);
 
-  const handleAddToCart = async () => {
+const handleAddToCart = async () => {
     // 1. ตรวจสอบว่าผู้ใช้เลือกไซส์ (variant) แล้วหรือยัง
     if (!selectedVariant) {
       alert("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
@@ -93,6 +91,7 @@ const ProductDetail = () => {
       // 3. ถ้าไม่ได้ล็อกอิน ให้แจ้งเตือน
       if (!isLoggedIn) {
         alert("คุณยังไม่ได้ Login ต้อง Login ก่อนซื้อสินค้า");
+        navigate("/login")
         // อาจจะ redirect ไปหน้า login ตรงนี้
         return;
       }
@@ -112,7 +111,7 @@ const ProductDetail = () => {
       // 6. แสดงข้อความบอกผู้ใช้ว่าสำเร็จ
       if (cartRes.data.cartOK) {
         alert("เพิ่มสินค้าลงตะกร้าสำเร็จ!");
-        setMessage("เพิ่มสินค้าลงตะกร้าสำเร็จ!"); // หรือจะใช้ State แสดงผลสวยๆ
+     // หรือจะใช้ State แสดงผลสวยๆ
         console.log("Add to cart response:", cartRes.data.messageAddCart);
       } else {
         // กรณีเกิดข้อผิดพลาดจากฝั่ง Backend
@@ -122,7 +121,7 @@ const ProductDetail = () => {
       console.error("Error adding to cart:", err);
       alert("เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้ง");
     }
-
+  }
 
   var settings = {
     dots: false,
@@ -154,7 +153,7 @@ const ProductDetail = () => {
     ],
   };
 
- if (!product || !product.variants) return <p>Loading...</p>;
+ if (!product ) return <p>Loading...</p>;
 
   return (
     <>
@@ -279,7 +278,7 @@ const ProductDetail = () => {
               <div className="flex flex-col gap-2">
                 <button
                   type="button"
-                  onClick={handleAddToCart}
+                 onClick={handleAddToCart}
                   className="font-semibold text-md text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
                 >
                   <span>เพิ่มในตระกร้า</span>
@@ -350,5 +349,5 @@ const ProductDetail = () => {
     </>
   );
 };
-}
+
 export default ProductDetail;

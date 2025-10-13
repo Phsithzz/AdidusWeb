@@ -34,7 +34,7 @@ export const addCart = async(cartData)=>{
     else{
         const {rows} = await query(`
             INSERT INTO cart(customer_email,variant_id,quantity,price)
-            VALUES($1,$2,$3,$4) RETURNING
+            VALUES($1,$2,$3,$4) RETURNING*
             `,[customer_email,variant_id,quantity,price])
         return rows[0]
     }

@@ -12,6 +12,7 @@ import database from "./Config/database.js";
 import productRoute from "./Routes/productRoute.js";
 import variantRoute from "./Routes/variantRoute.js";
 import userRoute from "./Routes/userRoute.js";
+import cartRoute from "./Routes/cartRoute.js"
 //import
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.use(productRoute);
 app.use(variantRoute);
 app.use(userRoute);
+app.use(cartRoute)
 //route
 
 //run

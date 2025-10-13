@@ -10,11 +10,14 @@ import ProductCategory from "./components/ProductCategory";
 import ProductDetail from "./pages/ProductDetail";
 import ProductBrand from "./components/ProductBrand";
 import LayoutBrand from "./layouts/LayoutBrand";
+import PageUser from "./pages/PageUser";
+import Cart from "./pages/Cart";
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
+
           <Route path="/" element={<LayoutHome />}>
             <Route index element={<HomeProduct />} />
 
@@ -52,13 +55,15 @@ const App = () => {
               element={<ProductBrand brand="NewBalance" />}
             />
           </Route>
-
           <Route path="products" element={<LayoutProduct />} />
           <Route path="brands" element={<LayoutBrand />} />
           <Route path="products/:id" element={<ProductDetail />} />
 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="user/info" element={<PageUser/>}/>
+
+          <Route path="cart" element={<Cart/>}/> 
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

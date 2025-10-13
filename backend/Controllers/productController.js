@@ -115,7 +115,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const productId = req.params.id;
+    const {productId} = req.params;
     const deleted = await productService.deleteProduct(productId);
 
     if (!deleted) {
@@ -123,7 +123,6 @@ export const deleteProduct = async (req, res) => {
         message: "Product not Found",
       });
     }
-
     res.status(200).send("DELETED");
   } catch (err) {
     console.log(err);

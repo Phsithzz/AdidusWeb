@@ -13,6 +13,8 @@ import { CiStar } from "react-icons/ci";
 import { motion } from "framer-motion";
 import Slider from "react-slick";
 import Detail from "../components/Detail.jsx";
+import * as user from "../function/user.js"
+import  * as cart from "../function/cart.js"
 const shipping = [
   {
     id: 1,
@@ -37,11 +39,18 @@ const shipping = [
 ];
 
 const ProductDetail = () => {
+  
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [showProduct, setShowProduct] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [openDetail,setOpenDetail] = useState(false)
+
+  const [selectedVariant,setSelectedVariant] = useState(null)
+
+
+  const [message,setMessage] = useState(null)
+
 
   const RandomProduct = (array) => {
     return array
@@ -50,16 +59,70 @@ const ProductDetail = () => {
       .map((a) => a[1]);
   };
 
-  useEffect(() => {
-    const loadData = async () => {
+ useEffect(() => {
+  const loadData = async () => {
+    try { // 👈 เพิ่ม try
       const resId = await products.getProductId(id);
+      console.log("ข้อมูลสินค้าที่ได้รับ:", resId.data); // 👈 เพิ่ม log เพื่อเช็คข้อมูล
       setProduct(resId.data);
+
       const resShow = await products.getProduct();
       setShowProduct(RandomProduct(resShow.data));
+
       window.scrollTo(0, 0);
-    };
-    loadData();
-  }, [id]);
+    } catch (error) { // 👈 เพิ่ม catch
+      console.error("โหลดข้อมูลสินค้าไม่สำเร็จ:", error); // 👈 บรรทัดนี้จะแสดง Error ใน Console ถ้า API ล้มเหลว
+    }
+  };
+  loadData();
+}, [id]);
+
+  const handleAddToCart = async () => {
+    // 1. ตรวจสอบว่าผู้ใช้เลือกไซส์ (variant) แล้วหรือยัง
+    if (!selectedVariant) {
+      alert("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
+      return; // หยุดการทำงาน
+    }
+
+    try {
+      // 2. เช็คสถานะการล็อกอินล่าสุดจาก Server โดยตรง
+      const userRes = await user.getUser();
+      const isLoggedIn = userRes.data.login;
+      const userEmail = userRes.data.email;
+
+      // 3. ถ้าไม่ได้ล็อกอิน ให้แจ้งเตือน
+      if (!isLoggedIn) {
+        alert("คุณยังไม่ได้ Login ต้อง Login ก่อนซื้อสินค้า");
+        // อาจจะ redirect ไปหน้า login ตรงนี้
+        return;
+      }
+
+      // 4. ถ้าล็อกอินแล้ว: เตรียมข้อมูลเพื่อส่งไปที่ Backend
+      const cartData = {
+        customer_email: userEmail,
+        variant_id: selectedVariant.variant_id,
+        quantity: 1, // ตอนนี้ยังไม่มีตัวเลือกจำนวน ให้ใส่เป็น 1 ไปก่อน
+        price: product.price,
+      };
+
+      // 5. เรียกใช้ API addCart
+      console.log("Sending data to cart:", cartData);
+      const cartRes = await cart.addCart(cartData);
+
+      // 6. แสดงข้อความบอกผู้ใช้ว่าสำเร็จ
+      if (cartRes.data.cartOK) {
+        alert("เพิ่มสินค้าลงตะกร้าสำเร็จ!");
+        setMessage("เพิ่มสินค้าลงตะกร้าสำเร็จ!"); // หรือจะใช้ State แสดงผลสวยๆ
+        console.log("Add to cart response:", cartRes.data.messageAddCart);
+      } else {
+        // กรณีเกิดข้อผิดพลาดจากฝั่ง Backend
+        alert(cartRes.data.messageAddCart || "เกิดข้อผิดพลาดในการเพิ่มสินค้า");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้ง");
+    }
+
 
   var settings = {
     dots: false,
@@ -91,7 +154,7 @@ const ProductDetail = () => {
     ],
   };
 
-  if (!product) return <p>Loading...</p>;
+ if (!product || !product.variants) return <p>Loading...</p>;
 
   return (
     <>
@@ -198,11 +261,13 @@ const ProductDetail = () => {
                       type="button"
                       disabled={v.stock_quantity === 0}
                       key={v.variant_id}
+                      onClick={()=>setSelectedVariant(v)}
                       className={`border-2 border-gray-400 rounded-md px-4 transition ease-in  py-2 cursor-pointer
                           ${
                             v.stock_quantity === 0
                               ? "opacity-30 bg-gray-200 cursor-not-allowed line-through"
-                              : "hover:border-black hover:border-2"
+                              : selectedVariant?.variant_id === v.variant_id
+                              ? "bg-black text-white border border-white":"hover:border-black "
                           }`}
                     >
                       {v.size} US
@@ -214,6 +279,7 @@ const ProductDetail = () => {
               <div className="flex flex-col gap-2">
                 <button
                   type="button"
+                  onClick={handleAddToCart}
                   className="font-semibold text-md text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
                 >
                   <span>เพิ่มในตระกร้า</span>
@@ -268,10 +334,10 @@ const ProductDetail = () => {
                             <LuMousePointerClick className="text-xl" />
                           </button>
                         </Link>
-                        <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
+                        {/* <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
                           <BsCartPlus className="text-xl" />
                           <span>Add to Cart</span>
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>
@@ -284,5 +350,5 @@ const ProductDetail = () => {
     </>
   );
 };
-
+}
 export default ProductDetail;

@@ -103,7 +103,7 @@ export const deleteProduct = async (productId) => {
 
 export const searchProduc = async (searchTerm) => {
   const { rows } = await query(
-    "SELECT * FROM products WHERE name ILIKE $1 OR description ILIKE $1 OR brand ILIKE $1 OR category_name ILIKE $1",
+    "SELECT * FROM products WHERE name ILIKE $1 OR description ILIKE $1 OR brand ILIKE $1 OR category_name ILIKE $1 ORDER BY price DESC",
     [`%${searchTerm}%`]
   );
   return rows;

@@ -65,7 +65,12 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, checkuser.passwordhash);
     if (isMatch) {
       const theuser = {
-        email: checkuser.email,
+        name:checkuser.name,
+        lastname:checkuser.lastname,
+        email:checkuser.email,
+        role:checkuser.role
+
+        
       };
       const secret_key = process.env.SECRET_KEY;
       const token = jwt.sign(theuser, secret_key, { expiresIn: "1h" });
@@ -78,6 +83,7 @@ export const login = async (req, res) => {
       res.status(200).json({
         message: "Login Success",
         login: true,
+        user:theuser
       });
     } else {
       res.clearCookie("token", {
@@ -112,14 +118,41 @@ export const getUser = async (req, res) => {
     const user = jwt.verify(token, secret_key);
     console.log(user);
     return res.json({
+      name:user.name,
+      lastname:user.lastname,
       email: user.email,
+      role:user.role,
       login: true,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       message: "Server error getUser",
+      login:false,
       error: err.message,
     });
   }
 };
+
+export const logoutUser = async(req,res)=>{
+  console.log("GET /logout is request")
+  try {
+    res.clearCookie("token",{
+      httpOnly:true,
+      secure:true,
+      sameSite:'strict'
+    })
+
+    res.json({
+      message:"Login Fail",login:false
+    })
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message:"Server error logoutUser",
+      error:err.message
+    })
+    
+  }
+}

@@ -57,7 +57,7 @@ const HomeProduct = () => {
                       </span>
                     </button>
                   </Link>
-                  <button
+                  {/* <button
                     type="button"
                     className="flex items-center rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2 "
                   >
@@ -65,7 +65,7 @@ const HomeProduct = () => {
                       <BsCartPlus className="text-xl" />
                     </span>
                     <span>Add to Cart</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

@@ -1,25 +1,25 @@
 import { useState } from "react";
 import "./login.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link,  useNavigate } from "react-router-dom";
+import * as user from "../function/user.js"
 function Login() {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
   const [login, setLogin] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate()
   
   const handleSubmit = async(e)=>{
     e.preventDefault()
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API}/user/login`,{email,password})
-      console.log(res.data)
+      const res = await user.login({email,password})
       setLogin(res.data.login)
       setMessage(res.data.message)
       if(res.data.login === true){
-        navigate("/")
+        navigate("/user/info")
       }
     } catch (err) {
       console.log(err)

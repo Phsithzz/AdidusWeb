@@ -18,3 +18,6 @@ export const register = async (userData) => {
 
   return rows[0];
 };
+
+
+

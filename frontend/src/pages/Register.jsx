@@ -1,7 +1,8 @@
-import axios from "axios";
+
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
+import * as user from  "../function/user.js"
 const Register = () => {
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
@@ -24,10 +25,7 @@ const Register = () => {
     }
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API}/user/register`,
-        { name, lastname, email, password }
-      );
+      const res = await user.register({name,lastname,email,password})
       console.log(res.data);
       setRegist(res.data.regist);
       setMessage(res.data.message);

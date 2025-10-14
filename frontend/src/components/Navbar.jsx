@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 
 import * as products from "../function/product.js";
 import * as users from "../function/user.js";
-import axios from "axios";
 
 const imageList = [
   {
@@ -310,7 +309,7 @@ const Navbar = () => {
               </div>
 
               <div className="flex items-center gap-4 flex-shrink-0">
-                <Link to="/cart">
+                <Link to="/cart" >
                   <RiShoppingBag2Line className="text-white font-semibold text-4xl cursor-pointer " />
                 </Link>
 

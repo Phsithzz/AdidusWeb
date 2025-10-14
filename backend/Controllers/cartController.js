@@ -57,3 +57,64 @@ export const addCart = async(req,res)=>{
         
     }
 }
+
+export const getCart  = async(req,res)=>{
+    console.log("GET /cart/:customerEmail")
+    try {
+        const {customerEmail} = req.params
+        const cart = await cartService.getCart(customerEmail)
+        res.status(200).json(cart)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error getCart",
+            error:err.message
+        })
+        
+    }
+}
+
+export const updateCartQuantity = async(req,res)=>{
+    console.log("PUT /cart/:cartId")
+    try {
+        const {cartId} = req.params
+        const {newQuantity} = req.body
+
+        if(newQuantity == null || newQuantity < 1){
+            return res.status(400).json({message:"Invalid quantity"})
+        }
+
+        const updateCart  = await cartService.updaeCartQuantity(cartId,newQuantity)
+        if(!updateCart){
+            return res.status(404).json({message:"Cart item not found"})
+        }
+        res.status(200).json(updateCart)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error updataCartQuantity",
+            error:err.message
+        })
+        
+    }
+}
+
+export const removeCart = async(req,res)=>{
+    console.log("DELETE /cart/:cartId")
+    try {
+        const {cartId} = req.params
+        const deleted = await cartService.removeCart(cartId)
+        if(!deleted){
+            return res.status(404).json({message:"Cart not Found"})
+        }
+        res.status(200).json({message:"Cart deleted"})
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error removeCart",
+            error:err.message
+        })
+        
+    }
+}

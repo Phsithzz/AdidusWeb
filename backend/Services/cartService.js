@@ -40,3 +40,26 @@ export const addCart = async(cartData)=>{
     }
 
 }
+
+export const getCart = async(customerEmail)=>{
+    const {rows} = await query(`
+        SELECT c.cart_id,c.quantity, c.price,p.name,p.image_filename,p.name,v.size
+        FROM cart c
+        JOIN product_variants v ON c.variant_id = v.variant_id
+        JOIN products p ON v.product_id = p.product_id
+        WHERE c.customer_email = $1 AND c.status = FALSE
+        `,[customerEmail])
+    return rows    
+}
+
+export const updaeCartQuantity = async(cartId,newQuantity)=>{
+    const {rows} = await query(`
+        UPDATE cart SET quantity = $1 WHERE cart_id = $2 RETURNING*
+        `,[newQuantity,cartId])
+    return rows || null
+}
+
+export const removeCart = async(cartId)=>{
+    const {rowCount} = await query("DELETE FROM cart WHERE cart_id = $1",[cartId])
+    return rowCount > 0
+}

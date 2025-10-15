@@ -2,6 +2,7 @@ import { query } from "../Config/database.js";
 
 //C R U D
 
+//Admin use
 export const createVariant = async (variantData) => {
   const { product_id, stock_quantity, price, size, color } = variantData;
 
@@ -34,3 +35,4 @@ export const deleteVariant = async (productId) => {
   );
   return rowCount > 0;
 };
+//Admin use

@@ -1,6 +1,11 @@
 import * as variantService from "../Services/variantService.js";
 
+//C R U D
+
+//Admin use
+
 export const createVariant = async (req, res) => {
+  console.log("POST /variant is request")
   try {
     const variantData = req.body;
     const newvariant = await variantService.createVariant(variantData);
@@ -15,6 +20,7 @@ export const createVariant = async (req, res) => {
 };
 
 export const getVariant = async (req, res) => {
+  console.log("GET /variant is request")
   try {
     const variant = await variantService.getVariant();
     res.status(200).json(variant);
@@ -28,6 +34,7 @@ export const getVariant = async (req, res) => {
 };
 
 export const updateVariant = async (req, res) => {
+  console.log("PUT /variant/:id")
   try {
     const variantId = req.params.id;
     const variantData = req.body;
@@ -53,6 +60,7 @@ export const updateVariant = async (req, res) => {
 };
 
 export const deleteVariant = async (req, res) => {
+  console.log("DELETE /variant/:id")
   try {
     const variantId = req.params.id;
     const deleted = await variantService.deleteVariant(variantId);
@@ -72,3 +80,5 @@ export const deleteVariant = async (req, res) => {
     });
   }
 };
+
+//Admin use

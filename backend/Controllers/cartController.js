@@ -1,7 +1,8 @@
 import * as cartService from "../Services/cartService.js"
 
+//เอาไว้ใช้เช็คว่า user มีตระกร้าอยู่่แล้วรึป่าว
 export const checkCart = async(req,res)=>{
-    console.log("POST /cart is request")
+    console.log("POST /cart/checkcart is request")
     try {
         const {email} = req.body
         if(!email){
@@ -33,6 +34,7 @@ export const checkCart = async(req,res)=>{
     }
 }
 
+//เอาไว้เพิ่มข้อมูลลงในตระกร้าของuser แต่ละคน และมีการเพิ่ม ปริมาณสินค้าถ้าในตระกร้ามีสินค้าอยู่แล้ว
 export const addCart = async(req,res)=>{
     console.log("POST /cart/addcart is request")
     try {
@@ -58,6 +60,7 @@ export const addCart = async(req,res)=>{
     }
 }
 
+//เอาไว้ใช้ตอนโชว์สินค้าของลูกค้าแต่ละคน
 export const getCart  = async(req,res)=>{
     console.log("GET /cart/:customerEmail")
     try {
@@ -74,6 +77,7 @@ export const getCart  = async(req,res)=>{
     }
 }
 
+//เอาไว้ใช้อัพเดทปริมาณสินค้าในตระกร้า
 export const updateCartQuantity = async(req,res)=>{
     console.log("PUT /cart/:cartId")
     try {
@@ -84,7 +88,7 @@ export const updateCartQuantity = async(req,res)=>{
             return res.status(400).json({message:"Invalid quantity"})
         }
 
-        const updateCart  = await cartService.updaeCartQuantity(cartId,newQuantity)
+        const updateCart  = await cartService.updateCartQuantity(cartId,newQuantity)
         if(!updateCart){
             return res.status(404).json({message:"Cart item not found"})
         }
@@ -100,6 +104,9 @@ export const updateCartQuantity = async(req,res)=>{
     }
 }
 
+//C R U D 
+
+//Admin use
 export const removeCart = async(req,res)=>{
     console.log("DELETE /cart/:cartId")
     try {
@@ -118,3 +125,5 @@ export const removeCart = async(req,res)=>{
         
     }
 }
+
+//Admin use

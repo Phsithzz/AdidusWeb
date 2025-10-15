@@ -1,11 +1,14 @@
 import { query } from "../Config/database.js";
+
 import bcrypt from "bcrypt";
 
+//เอาไว้เช็คตอนLogin
 export const checkEmail = async (email) => {
   const { rows } = await query("SELECT * FROM users WHERE email=$1", [email]);
   return rows[0] || null;
 };
 
+//เอาไว้บันทึกข้อมูลลงTable
 export const register = async (userData) => {
   const { name, lastname, email, password } = userData;
 
@@ -18,6 +21,11 @@ export const register = async (userData) => {
 
   return rows[0];
 };
+
+//C R U D
+
+//Admin use
+
 
 
 

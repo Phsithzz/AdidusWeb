@@ -1,12 +1,17 @@
+//import
 import * as userService from "../Services/userService.js";
+
 import dotenv from "dotenv";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+//import
 
 dotenv.config();
 
+//ใช้ตอนลงทะเบียน
 export const register = async (req, res) => {
-  console.log("POST /register is requested");
+  console.log("POST /user/register is request");
   try {
     const userData = req.body;
     if (
@@ -44,6 +49,7 @@ export const register = async (req, res) => {
   }
 };
 
+//ใช้เช็คตอนlogin
 export const login = async (req, res) => {
   console.log("POST /login is requested");
   try {
@@ -106,8 +112,9 @@ export const login = async (req, res) => {
   }
 };
 
+//เอาไว้ใช้ตอนuserดูข้อมูลของตนเอง และ เอาไว้เช็คtoken เพื่อดูว่าuser loginรึยัง
 export const getUser = async (req, res) => {
-  console.log("GET /getUser is requested.");
+  console.log("GET /user/info is requested.");
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -134,8 +141,9 @@ export const getUser = async (req, res) => {
   }
 };
 
+//เอาไว้ใช้ลบcookie เมื่อuser กด ออกจากระบบ
 export const logoutUser = async(req,res)=>{
-  console.log("GET /logout is request")
+  console.log("GET /user/logout is request")
   try {
     res.clearCookie("token",{
       httpOnly:true,
@@ -156,3 +164,7 @@ export const logoutUser = async(req,res)=>{
     
   }
 }
+
+//C R U D
+
+//Admin use

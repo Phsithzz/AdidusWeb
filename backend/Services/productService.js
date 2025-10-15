@@ -2,6 +2,7 @@ import { query } from "../Config/database.js";
 
 //C R U D
 
+//Admin use
 export const createProduct = async (productData) => {
   const {
     name,
@@ -33,40 +34,6 @@ export const getProduct = async () => {
   const { rows } = await query("SELECT * FROM products ORDER BY brand ASC, name ASC");
   return rows;
 };
-
-export const getProductShow = async()=>{
-  const {rows} = await query("SELECT * FROM products WHERE category_name='show' ORDER BY brand ASC, name ASC")
-  return rows
-}
-
-export const getProductBrand = async(brand)=>{
-  const {rows} = await query("SELECT * FROM products WHERE brand=$1",[brand])
-  return rows
-}
-
-export const getProductId = async(productId)=>{
-  const {rows:productRows} = await query("SELECT * FROM products WHERE  product_id=$1",
-    [productId]
-  )
-
-  const product =productRows[0]
-
-  const {rows:variantRows} = await query(
-    "SELECT variant_id,size,color,stock_quantity,price FROM product_variants WHERE product_id = $1 ORDER BY  size ASC"
-    ,[productId]
-  )
-  product.variants = variantRows
-
-  return product
-}
-
-export const getProductType = async(description)=>{
-
-  const {rows} = await query("SELECT * FROM products WHERE description=$1  ORDER BY brand ASC, name ASC",
-    [description]
-  )
-  return rows
-}
 
 export const updateProduct = async (productId, productData) => {
   const {
@@ -108,3 +75,47 @@ export const searchProduc = async (searchTerm) => {
   );
   return rows;
 };
+//Admin use
+
+//เอาไว้แสดงสินค้าหน้าตัวโชว์
+export const getProductShow = async()=>{
+  const {rows} = await query("SELECT * FROM products WHERE category_name='show' ORDER BY brand ASC, name ASC")
+  return rows
+}
+
+//เอาไว้ใช้ตอนผู้ใช้กด เลือกBrand ตรงNavbar
+export const getProductBrand = async(brand)=>{
+  const {rows} = await query("SELECT * FROM products WHERE brand=$1",[brand])
+  return rows
+}
+
+//เอาไว้ใช้เมื่อผู้ให้กดเลือก View Detail และจะแสดงหน้าของสินค้านั้นๆ 1 ชิ้น
+export const getProductId = async(productId)=>{
+  const {rows:productRows} = await query("SELECT * FROM products WHERE  product_id=$1",
+    [productId]
+  )
+
+  const product =productRows[0]
+
+  const {rows:variantRows} = await query(
+    "SELECT variant_id,size,color,stock_quantity,price FROM product_variants WHERE product_id = $1 ORDER BY  size ASC"
+    ,[productId]
+  )
+  product.variants = variantRows
+
+  return product
+}
+
+//เอาไว้ใช้ตอนผู้ให้เลือกประเภทของรองเท้าตรง Navbar Product กับ category sidebar ด้านซ้าย
+export const getProductType = async(description)=>{
+
+  const {rows} = await query("SELECT * FROM products WHERE description=$1  ORDER BY brand ASC, name ASC",
+    [description]
+  )
+  return rows
+}
+
+
+
+
+

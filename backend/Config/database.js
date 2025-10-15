@@ -18,5 +18,6 @@ const pool = new Pool({
   )}@${DBHOST}:${DBPORT}/${DB}`,
 });
 
+//เอาไว้ใช้ในการเขียนpostgreSQL ในService
 export const query = (text, params) => pool.query(text, params);
 export default pool;

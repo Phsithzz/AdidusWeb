@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import * as productAPI from "../function/product.js";
 import { Link } from "react-router-dom";
 import { LuMousePointerClick } from "react-icons/lu";
-import { BsCartPlus } from "react-icons/bs";
 
 const Product = () => {
   const [products, setProducts] = useState([]);

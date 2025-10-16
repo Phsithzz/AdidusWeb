@@ -7,11 +7,11 @@ import Login from "./pages/Login";
 import HomeProduct from "./components/HomeProduct";
 import LayoutProduct from "./layouts/LayoutProduct";
 import ProductCategory from "./components/ProductCategory";
-import ProductDetail from "./pages/ProductDetail";
 import ProductBrand from "./components/ProductBrand";
 import LayoutBrand from "./layouts/LayoutBrand";
 import PageUser from "./pages/PageUser";
-import Cart from "./pages/Cart";
+import LayoutCart from "./layouts/LayoutCart";
+import LayoutProductDetail from "./layouts/LayoutProductDetail";
 const App = () => {
   return (
     <>
@@ -57,13 +57,12 @@ const App = () => {
           </Route>
           <Route path="products" element={<LayoutProduct />} />
           <Route path="brands" element={<LayoutBrand />} />
-          <Route path="products/:id" element={<ProductDetail />} />
+          <Route path="products/:id" element={<LayoutProductDetail />} />
 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="user/info" element={<PageUser/>}/>
-
-          <Route path="cart" element={<Cart/>}/> 
+          <Route path="cart" element={<LayoutCart/>}/>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

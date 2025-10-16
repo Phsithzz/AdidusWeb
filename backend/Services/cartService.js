@@ -46,7 +46,7 @@ export const addCart = async(cartData)=>{
 //เอาไว้ใช้ตอนโชว์สินค้าของลูกค้าแต่ละคน
 export const getCart = async(customerEmail)=>{
     const {rows} = await query(`
-        SELECT c.cart_id,c.quantity, c.price,p.name,p.image_filename,p.name,v.size
+        SELECT c.cart_id,c.quantity, c.price,p.name,p.description,p.image_filename,p.name,v.size
         FROM cart c
         JOIN product_variants v ON c.variant_id = v.variant_id
         JOIN products p ON v.product_id = p.product_id

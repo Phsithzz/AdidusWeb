@@ -5,9 +5,37 @@ import dotenv from "dotenv";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
+import multer from "multer"
 //import
 
 dotenv.config();
+
+// upload part
+// กำหนดตำแหน่งที่จะเก็บ file ที่ upload --> img_users
+const storage = multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,"img_users")
+  },
+  filename:function(req,file,cb){
+    const filename = `${req.body.email}.jpg`
+    cb(null,filename)
+
+  }
+})
+// จำกัดประเภทของไฟล์ที่อัปโหลด
+const upload = multer({
+    storage: storage,
+}).single('file');
+
+//ส่วน Upload File
+export const uploadUser = async(req,res)=>{
+  console.log("Upload User Image")
+  upload(req,res,(err)=>{
+    if(err) return res.status(400).json({message:err.message})
+    res.status(200).json({message:"File uploaded successfully"})
+  })
+}
 
 //ใช้ตอนลงทะเบียน
 export const register = async (req, res) => {
@@ -129,7 +157,7 @@ export const getUser = async (req, res) => {
       lastname:user.lastname,
       email: user.email,
       role:user.role,
-      login: true,
+      login: true,  
     });
   } catch (err) {
     console.log(err);

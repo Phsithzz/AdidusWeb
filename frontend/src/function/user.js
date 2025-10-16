@@ -15,3 +15,13 @@ export const getUser = async()=>{
 export const logoutUser = async()=>{
     return await axios.get(`${import.meta.env.VITE_API}/user/logout`)
 }
+
+export const uploadUser = async(formData)=>{
+    return await axios.post(`${import.meta.env.VITE_API}/user/upload`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+}
+

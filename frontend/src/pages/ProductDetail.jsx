@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link,  useParams } from "react-router-dom";
 import * as products from "../function/product.js";
 import { TbRulerMeasure } from "react-icons/tb";
 import { HiOutlineChevronDown } from "react-icons/hi";
@@ -10,6 +10,7 @@ import * as user from "../function/user.js";
 import * as cart from "../function/cart.js";
 import { RxCross2 } from "react-icons/rx";
 import { FaCheckCircle } from "react-icons/fa";
+import SizeShoe from "../components/SizeShoe.jsx";
 const shipping = [
   {
     id: 1,
@@ -42,11 +43,14 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
 
   const [showCart, setShowCart] = useState(false);
-  const navigate = useNavigate();
 
-  const [login,setLogin] = useState(null)
-  const [email,setEmail] = useState(null)
-  const [carts,setCarts] = useState([])
+  const [email, setEmail] = useState(null);
+  const [carts, setCarts] = useState([]);
+
+  const [message, setMessage] = useState("");
+
+  const [sizeShow,setSizeShow] = useState(false)
+  
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -63,45 +67,39 @@ const ProductDetail = () => {
     };
     loadData();
   }, [id]);
- useEffect(()=>{
-  const checkLogin = async()=>{
-   try {
-        const res = await user.getUser();
-       
-               if (!res.data.login) {
-                 navigate("/login");
-               } else {
-                setLogin(true)
-                 setEmail(res.data.email);
-               }
-    } catch (err) {
-      console.log(err)
-      
-    }
-  }
-  checkLogin()
- 
-  },[])
-  useEffect(()=>{
-    if (login && email) {
-          const loadDataCart = async () => {
-            try {
-              const res = await cart.getCart(email);
-              setCarts(res.data);
-            } catch (err) {
-              console.log(err);
-            } 
-          };
-          loadDataCart();
-        }
-  },[login, email])
 
- 
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const res = await user.getUser();
+
+        setEmail(res.data.email);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    checkLogin();
+  }, []);
+
+  useEffect(() => {
+    if (email) {
+      const loadDataCart = async () => {
+        try {
+          const res = await cart.getCart(email);
+          setCarts(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      loadDataCart();
+    }
+  }, [email]);
+
   const handleAddToCart = async () => {
-    window.scrollTo({top:0,behavior:"smooth"});
+    setMessage("");
     // 1. ตรวจสอบว่าผู้ใช้เลือกไซส์ (variant) แล้วหรือยัง
     if (!selectedVariant) {
-      alert("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
+      setMessage("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
       return; // หยุดการทำงาน
     }
 
@@ -113,9 +111,7 @@ const ProductDetail = () => {
 
       // 3. ถ้าไม่ได้ล็อกอิน ให้แจ้งเตือน
       if (!isLoggedIn) {
-        alert("คุณยังไม่ได้ Login ต้อง Login ก่อนซื้อสินค้า");
-        navigate("/login");
-        // อาจจะ redirect ไปหน้า login ตรงนี้
+        setMessage("คุณยังไม่ได้ Login ต้อง Login ก่อนซื้อสินค้า");
         return;
       }
 
@@ -133,6 +129,7 @@ const ProductDetail = () => {
 
       // 6. แสดงข้อความบอกผู้ใช้ว่าสำเร็จ
       if (cartRes.data.cartOK) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
         setShowCart(true);
         const res = await cart.getCart(userEmail);
         setCarts(res.data);
@@ -224,15 +221,21 @@ const ProductDetail = () => {
                 </div>
               )}
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center">
                   <p className="font-semibold text-xl">เลือกไซส์</p>
                   <button
                     type="button"
-                    className="flex items-center gap-2 font-semibold"
+                    onClick={()=>setSizeShow(true)}
+                    className="flex items-center gap-2 font-semibold underline"
                   >
                     <TbRulerMeasure />
                     <span>คำแนะนำไซต์</span>
                   </button>
+                  {sizeShow &&(
+                    <div className="fixed top-0 left-0 w-full h-full backdrop-blur-xs flex justify-center items-center z-50">
+                  <SizeShoe onCancel={() => setSizeShow(false)} />
+                </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-3 gap-2 ">
                   {product.variants.map((v) => (
@@ -240,8 +243,8 @@ const ProductDetail = () => {
                       type="button"
                       disabled={v.stock_quantity === 0}
                       key={v.variant_id}
-                      onClick={() => setSelectedVariant(v)}
-                      className={`border-2 border-gray-400 rounded-md px-4 transition ease-in  py-2 cursor-pointer
+                      onClick={() => setSelectedVariant((prev)=>prev?.variant_id === v.variant_id?null :v)}
+                      className={`border-2 text-center border-gray-400 rounded-md px-4 transition ease-in  py-2 cursor-pointer
                           ${
                             v.stock_quantity === 0
                               ? "opacity-30 bg-gray-200 cursor-not-allowed line-through"
@@ -264,22 +267,24 @@ const ProductDetail = () => {
                 >
                   <span>เพิ่มในตระกร้า</span>
                 </button>
+                {message && (
+                  <p className="text-red-500 text-sm font-semibold">
+                    {message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
         {showCart && (
           <>
-
             <div className="fixed top-0 right-0 flex justify-end items-center w-full h-full bg-black/30   z-50">
               <div className="bg-white w-[400px] h-[350px] rounded-xl shadow-2xl fixed top-24 right-10">
                 <div className="flex flex-col space-y-4 p-6">
                   <div className="flex item-center   justify-between ">
                     <div className="flex items-center gap-2">
                       <FaCheckCircle className="text-green-500" />
-                      <p className="text-md font-semibold">
-                        เพิ่มในตะกร้าแล้ว
-                      </p>
+                      <p className="text-md font-semibold">เพิ่มในตะกร้าแล้ว</p>
                     </div>
                     <RxCross2
                       onClick={() => setShowCart(false)}
@@ -316,15 +321,13 @@ const ProductDetail = () => {
                   <div className="flex flex-col space-y-2">
                     <Link
                       to="/cart"
-              
                       className="font-semibold text-md text-center border border-gray-300 text-black bg-white px-2 hover:border-black  transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
                     >
                       ดูตะกร้า ({carts.length})
                     </Link>
 
-                     <Link
+                    <Link
                       to="/pay"
-              
                       className="font-semibold text-md text-center text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
                     >
                       <span>เช็คเอาท์</span>

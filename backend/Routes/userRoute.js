@@ -14,4 +14,5 @@ router.get("/user/info", userController.getUser);
 
 router.get("/user/logout",userController.logoutUser)
 
+router.post("/user/upload",userController.uploadUser)
 export default router;

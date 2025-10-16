@@ -46,7 +46,7 @@ export const addCart = async(cartData)=>{
 //เอาไว้ใช้ตอนโชว์สินค้าของลูกค้าแต่ละคน
 export const getCart = async(customerEmail)=>{
     const {rows} = await query(`
-        SELECT c.cart_id,c.quantity, c.price,p.name,p.description,p.image_filename,p.name,v.size
+        SELECT c.cart_id,c.quantity, c.price,p.product_id,p.name,p.description,p.image_filename,p.name,v.size
         FROM cart c
         JOIN product_variants v ON c.variant_id = v.variant_id
         JOIN products p ON v.product_id = p.product_id
@@ -61,6 +61,24 @@ export const updateCartQuantity = async(cartId,newQuantity)=>{
         UPDATE cart SET quantity = $1 WHERE cart_id = $2 RETURNING*
         `,[newQuantity,cartId])
     return rows || null
+}
+
+//เอาไว้ออัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
+export const confirmCart = async(customerEmail) =>{
+    
+    const cartItem = await query(`SELECT * FROM cart WHERE customer_email=$1`,[customerEmail])
+    if(cartItem.rows.length ===0) return null
+
+    const totalPrice = cartItem.rows.reduct((sum,item)=>sum + Number(item.price) * item.quantity,0  )
+
+    const order = await query(`
+        INSERT INTO orders(customer_email,total_price,status)
+        VALUES($1,$2,true) RETURNING*
+        `,[customerEmail,totalPrice])
+    await query("UPDATE cart SET status=true WHERE customer_email=$1",[customerEmail])
+
+    return order.rows[0]
+
 }
 
 

@@ -8,6 +8,8 @@ router.post("/cart/checkcart",cartController.checkCart)
 
 router.post("/cart/addcart",cartController.addCart)
 
+router.put("/cart/confirm/:customerEmail",cartController.confirmCart)
+
 router.get("/cart/:customerEmail",cartController.getCart)
 
 router.put("/cart/:cartId",cartController.updateCartQuantity)

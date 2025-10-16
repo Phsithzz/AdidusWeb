@@ -104,6 +104,23 @@ export const updateCartQuantity = async(req,res)=>{
     }
 }
 
+//เอาไว้ออัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
+export const confirmCart = async(req,res)=>{
+    console.log("PUT /cart/confirm/:customerEmail is request")
+    try {
+        const {customerEmail} = req.params
+        const order = await cartService.confirmCart(customerEmail)
+        if(!order) return res.status(400).json({message:"No item to confirm"})
+        res.status(200).json(order)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error confirmCart",
+            error:err.message
+        })
+        
+    }
+}
 //C R U D 
 
 //Admin use

@@ -34,6 +34,7 @@ app.use(
   })
 );
 app.use("/img_products",express.static("img_products"))
+app.use("/img_users",express.static("img_users"))
 app.use(bodyParser.json());
 app.use(cookieParser());
 //app use middleware

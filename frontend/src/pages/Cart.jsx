@@ -13,7 +13,6 @@ const Cart = () => {
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [product,setProduct] = useState([])
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -162,7 +161,7 @@ const Cart = () => {
                       <div className="flex justify-between ">
                         <div className="flex flex-col space-y-2">
 
-                          <Link to={`/products/${product.product_id}`} className="text-md font-semibold">{cart.name}</Link>
+                          <Link to={`/products/${cart.product_id}`} className="text-md font-semibold">{cart.name}</Link>
                           <p className="font-medium text-md text-black/50  ">
                             {cart.description}
                           </p>
@@ -228,12 +227,12 @@ const Cart = () => {
                     }).format(totalPrice)}
                   </p>
                 </div>
-                <button
+                <Link to="/pay"
                   type="button"
                   className="font-semibold text-md text-center text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-2 rounded-full cursor-pointer"
                 >
                   เช็คเอาท์
-                </button>
+                </Link>
               </div>
             </div>
           </div>

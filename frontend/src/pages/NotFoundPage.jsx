@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 const NotFoundPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
   const loadingSpin = async () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));

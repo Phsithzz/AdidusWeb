@@ -29,6 +29,8 @@ const ProductBrand = ({ brand }) => {
       </div>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
         {product.map((brands) => (
+          <Link to={`/products/${brands.product_id}`}>
+          
           <div
             key={brands.product_id}
             className="flex flex-col hover:border transition-all ease-in  space-y-2 p-4  "
@@ -81,6 +83,7 @@ const ProductBrand = ({ brand }) => {
               </div>
             </div>
           </div>
+          </Link>
         ))}
       </div>
     </>

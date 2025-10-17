@@ -86,6 +86,32 @@ export const confirmCart = async(customerEmail) =>{
 
 //Admin use
 
+export const createCart = async(cartData)=>{
+    const {customer_email,variant_id,quantity,price} = cartData
+    const {rows} = await query(`
+        INSERT INTO cart(customer_email,variant_id,quantity,price) 
+        VALUES($1,$2,$3,$4)
+        RETURNING*
+        `,[customer_email,variant_id,quantity,price])
+    return rows[0]
+}
+
+export const getAllCart = async()=>{
+    const {rows} = await query(`
+        SELECT * FROM cart
+        `)
+    return rows    
+}
+
+export const updateCart = async(cartId,cartData)=>{
+    const {customer_email,variant_id,quantity,price} = cartData
+    const {rows} = await query(`
+        UPDATE cart SET customer_email=$1,variant_id=$2,quantity=$3,price=$4
+        WHERE cart_id=$5 RETURNING*
+        `,[customer_email,variant_id,quantity,price,cartId])
+    return rows[0]
+}
+
 //ผู้ใช้ลบสินค้าในตระกร้า
 export const removeCart = async(cartId)=>{
     const {rowCount} = await query("DELETE FROM cart WHERE cart_id = $1",[cartId])

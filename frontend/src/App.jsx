@@ -12,6 +12,7 @@ import LayoutBrand from "./layouts/LayoutBrand";
 import PageUser from "./pages/PageUser";
 import LayoutCart from "./layouts/LayoutCart";
 import LayoutProductDetail from "./layouts/LayoutProductDetail";
+import LayoutPay from "./layouts/LayoutPay";
 const App = () => {
   return (
     <>
@@ -63,7 +64,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="user/info" element={<PageUser/>}/>
           <Route path="cart" element={<LayoutCart/>}/>
-
+          <Route path="pay" element={<LayoutPay/>}/>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

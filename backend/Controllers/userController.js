@@ -196,3 +196,61 @@ export const logoutUser = async(req,res)=>{
 //C R U D
 
 //Admin use
+
+export const getAllUser = async(req,res)=>{
+  console.log("GET /user is request")
+  try {
+    const user = await userService.getAllUser()
+    res.status(200).json(user)
+  } catch (err) {
+    console.log(err)
+    res.status(500).message({
+      message:"Server error getAllUser",
+      error:err.message
+    })
+    
+  }
+}
+
+export const updateUser = async(req,res)=>{
+  console.log("PUT /user/:userId is request")
+  try {
+    const {userId} = req.params
+    const userData = req.body
+    const updateUser = await userService.updateUser(userId,userData)
+    if(!updateUser){
+      return res.status(400).json({
+        message: "User not Found",
+      });
+    }
+    res.status(200).json(updateUser)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message:"Server error updateUser",
+      error:err.message
+    })
+    
+  }
+}
+
+export const removeUser  = async(req,res)=>{
+  console.log("DELETE /user/:userId is request")
+  try {
+    const {userId} = req.params
+    const deleted = await userService.removeUser(userId)
+
+    if(!deleted){
+      return res.status(400).json({message:"User Not Found"})
+    }
+
+    res.status(200).send("DELETED")
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message:"Server error removeUser",
+      error:err.message
+    })
+    
+  }
+}

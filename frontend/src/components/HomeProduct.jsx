@@ -19,7 +19,8 @@ const HomeProduct = () => {
     <>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
         {products.map((product) => (
-          <div
+          <Link to={`/products/${product.product_id}`}>
+                 <div
             key={product.product_id}
             className="flex flex-col hover:border transition-all ease-in  space-y-2 p-4  "
           >
@@ -57,19 +58,14 @@ const HomeProduct = () => {
                       </span>
                     </button>
                   </Link>
-                  {/* <button
-                    type="button"
-                    className="flex items-center rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2 "
-                  >
-                    <span>
-                      <BsCartPlus className="text-xl" />
-                    </span>
-                    <span>Add to Cart</span>
-                  </button> */}
+  
                 </div>
               </div>
             </div>
           </div>
+          
+          </Link>
+   
         ))}
       </div>
     </>

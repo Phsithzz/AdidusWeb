@@ -1,8 +1,8 @@
-import React from "react";
+
 import { useEffect } from "react";
 import { useState } from "react";
 import { LuMousePointerClick } from "react-icons/lu";
-import { BsCartPlus } from "react-icons/bs";
+
 import * as products from "../function/product.js";
 import { Link } from "react-router-dom";
 const ProductCategory = ({ category }) => {
@@ -31,6 +31,8 @@ const ProductCategory = ({ category }) => {
       </div>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
         {product.map((cate) => (
+          <Link to={`/products/${cate.product_id}`}>
+          
           <div
             key={cate.product_id}
             className="flex flex-col hover:border transition-all ease-in  space-y-2 p-4  "
@@ -83,6 +85,7 @@ const ProductCategory = ({ category }) => {
               </div>
             </div>
           </div>
+          </Link>
         ))}
       </div>
     </>

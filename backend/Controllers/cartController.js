@@ -124,8 +124,57 @@ export const confirmCart = async(req,res)=>{
 //C R U D 
 
 //Admin use
+
+export const getAllCart = async(req,res)=>{
+    console.log("GET /cart/admin is requst")
+    try {
+        const cart = await cartService.getAllCart()
+        res.status(200).json(cart)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error getAllUser",
+            error:err.message
+        })
+        
+    }
+}
+export const createCart = async(req,res)=>{
+    console.log("POST /cart/admin is request")
+    try {
+        const cartData = req.body
+        const newcart = await cartService.createCart(cartData)
+        res.status(201).json(newcart)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error createCart",
+            error:err.message
+        })
+    }
+}
+
+export const updateCart = async(req,res)=>{
+    console.log("PUT /cart/admin/:cartId is request")
+    try {
+        const {cartId} = req.params
+        const cartData = req.body
+        const updateCart = await cartService.updateCart(cartId,cartData)
+        if(!updateCart){
+            return res.status(400).json({message:"Cart not found"})
+        }
+        res.status(200).json(updateCart)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error updateCart",
+            error:err.message
+        })
+        
+    }
+}
 export const removeCart = async(req,res)=>{
-    console.log("DELETE /cart/:cartId")
+    console.log("DELETE /cart/admin/:cartId")
     try {
         const {cartId} = req.params
         const deleted = await cartService.removeCart(cartId)

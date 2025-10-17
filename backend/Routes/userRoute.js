@@ -15,4 +15,9 @@ router.get("/user/info", userController.getUser);
 router.get("/user/logout",userController.logoutUser)
 
 router.post("/user/upload",userController.uploadUser)
+
+//admin
+router.get("/user",userController.getAllUser)
+router.put("/user/:userId",userController.updateUser)
+router.delete("/user/:userId",userController.removeUser)
 export default router;

@@ -55,7 +55,7 @@ const PageUser = () => {
   const uploadFile = async () => {
     if (!file) {
       setMessage("เลือกFile เพื่อ Upload");
-      return;
+      return 
     }
 
     const formData = new FormData();
@@ -76,14 +76,14 @@ const PageUser = () => {
     <>
       <Navbar />
       <div className="container mx-auto mt-6 ">
-        <div className="p-10 border">
+        <div className="p-w10 border">
           <img
             src={
               imageUser
                 ? `${import.meta.env.VITE_API}/img_users/${email}.jpg`
                 : `${import.meta.env.VITE_API}/img_users/default.jpg`
             }
-            alt={email}
+            alt={email} className="rounded-full w-[350px] h-[350px]"
           />
 
           <h1>{email}</h1>
@@ -97,7 +97,7 @@ const PageUser = () => {
           >
            Save
           </button>
-          {message && <p className="mt-2 text-green-500">{message}</p>}
+          {message && <p className="mt-2 ">{message}</p>}
         </div>
       </div>
     </>

@@ -36,7 +36,7 @@ export const getVariant = async (req, res) => {
 export const updateVariant = async (req, res) => {
   console.log("PUT /variant/:id")
   try {
-    const variantId = req.params.id;
+    const {variantId} = req.params;
     const variantData = req.body;
 
     const updateVariant = await variantService.updateVariant(
@@ -62,7 +62,7 @@ export const updateVariant = async (req, res) => {
 export const deleteVariant = async (req, res) => {
   console.log("DELETE /variant/:id")
   try {
-    const variantId = req.params.id;
+    const {variantId} = req.params
     const deleted = await variantService.deleteVariant(variantId);
 
     if (!deleted) {

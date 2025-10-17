@@ -31,8 +31,10 @@ const Product = () => {
 
   return (
     <div className="p-6 space-y-12">
+      
       {productsByCategory.map((group) =>
         group.items.length > 0 ? (
+          
           <div key={group.category}>
             <div className="p-4">
               <h1 className="text-3xl text-left font-bold mb-4 bg-black text-white w-fit p-4 rounded-xl transitio ease-in duration-200 hover:bg-white hover:border-2 cursor-pointer hover:text-black">
@@ -41,11 +43,13 @@ const Product = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 space-y-8 mx-4 my-6">
               {group.items.map((product) => (
+                
                 <div
                   key={product.product_id}
                   className="flex flex-col hover:border rounded-md  shadow-xl space-y-2 p-4 transition-transform duration-300 ease-in-out overflow-hidden
              hover:scale-115"
                 >
+                  <Link to={`/products/${product.product_id}`}>
                   <div className="flex justify-center items-center">
                     <img
                       src={`${import.meta.env.VITE_API}/img_products/${
@@ -77,18 +81,18 @@ const Product = () => {
                             <LuMousePointerClick className="text-xl" />
                           </button>
                         </Link>
-                        {/* <button className="flex items-center rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
-                          <BsCartPlus className="text-xl" />
-                          <span>Add to Cart</span>
-                        </button> */}
+                      
                       </div>
                     </div>
                   </div>
+                  </Link>
+                  
                 </div>
               ))}
             </div>
           </div>
-        ) : null
+        ) 
+        : null
       )}
     </div>
   );

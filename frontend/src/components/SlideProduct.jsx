@@ -59,10 +59,12 @@ const SlideProduct = () => {
       <div className="max-w-7xl mx-auto mt-8 px-4 md:px-8 mb-20">
         <h1 className="text-2xl font-bold text-left">สินค้าที่คุณอาจสนใจ</h1>
         <div className="mt-4 ">
-          <Slider {...settings} className="w-full  px-14">
+          <Slider {...settings} className="w-full   px-14">
             {showProduct.map((show) => (
+              <Link to={`/products/${show.product_id}`}>
+              
               <div
-                className="flex flex-col   transition-all ease-in space-y-2 p-4 cursor-pointer"
+                className="flex flex-col  hover:border transition-all ease-in space-y-2 p-4 cursor-pointer"
                 key={show.product_id}
               >
                 <div className="flex justify-center items-center">
@@ -102,6 +104,7 @@ const SlideProduct = () => {
                   </div>
                 </div>
               </div>
+              </Link>
             ))}
           </Slider>
         </div>

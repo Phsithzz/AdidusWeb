@@ -6,8 +6,10 @@ import * as userController from "../Controllers/userController.js";
 
 const router = express.Router();
 
+router.get("/user/info/:email",userController.getOneUser)
+router.put("/user/info/:email",userController.userEditInfo)
+router.put("/user/password/:email", userController.updatePassword);
 router.post("/user/register", userController.register);
-
 router.post("/user/login", userController.login);
 
 router.get("/user/info", userController.getUser);

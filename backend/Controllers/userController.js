@@ -193,6 +193,63 @@ export const logoutUser = async(req,res)=>{
   }
 }
 
+//ใช้แสดงข้อมูลทั้งหมดของuser แต่ละคน
+export const getOneUser = async(req,res)=>{
+  console.log("GET /user/info/:email is request")
+  try {
+    const {email} = req.params
+    const getuser = await userService.getOneUser(email)
+    res.status(200).json(getuser)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message:"Server error getOneUser",
+      error:err.message
+    })
+    
+  }
+}
+
+//user แก้ไขข้อมูลส่วนตัว
+export const userEditInfo = async(req,res)=>{
+  console.log("PUT /user/info/:email is request")
+  try {
+    const {email} = req.params
+    const  userData = req.body
+    const editUser = await userService.userEditInfo(email,userData)
+    if(!editUser){
+      return res.status(400).json({
+        message:"User Not Found"
+      })
+    }
+    res.status(200).json({
+       email: editUser.email,
+      name: editUser.name,
+      lastname: editUser.lastname
+    })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message:"Server error userEditInfo",
+      error:err.message
+    })
+    
+  }
+  
+}//user อัพเดทรหัสผ่าน
+export const updatePassword = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    const updated = await userService.updatePassword(email, currentPassword, newPassword);
+
+    res.status(200).json({ message: "เปลี่ยนรหัสผ่านสำเร็จ ✅" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
+  }
+};
 //C R U D
 
 //Admin use

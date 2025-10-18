@@ -21,7 +21,49 @@ export const register = async (userData) => {
 
   return rows[0];
 };
+//ใช้แสดงข้อมูลทั้งหมดของuser แต่ละคน
+export const getOneUser = async(email)=>{
+  const {rows} = await query(`
+    SELECT * FROM users WHERE email=$1
+    `,[email])
+  return rows[0]
+}
+//user แก้ไขข้อมูลส่วนตัว
+export const userEditInfo = async(originalEmail,userData)=>{
+  const { name, lastname, email: newEmail } = userData;
 
+  const {rows} = await query(
+    `
+    UPDATE users
+     SET name=$1,lastname=$2,email=$3
+    WHERE email=$4
+    RETURNING*
+    `,[name,lastname,newEmail,originalEmail]
+  )
+  return rows[0]
+
+}
+
+// อัปเดตรหัสผ่าน
+export const updatePassword = async (email, currentPassword, newPassword) => {
+  // ดึง password hash ปัจจุบัน
+  const { rows } = await query(`SELECT passwordhash FROM users WHERE email=$1`, [email]);
+  if (rows.length === 0) throw new Error("User not found");
+
+  const isMatch = await bcrypt.compare(currentPassword, rows[0].passwordhash);
+  if (!isMatch) throw new Error("รหัสผ่านปัจจุบันไม่ถูกต้อง");
+
+  // hash password ใหม่
+  const salt = await bcrypt.genSalt(10);
+  const newHash = await bcrypt.hash(newPassword, salt);
+
+  // อัปเดตใน DB
+  const { rows: updated } = await query(
+    `UPDATE users SET passwordhash=$1 WHERE email=$2 RETURNING email`,
+    [newHash, email]
+  );
+  return updated[0];
+};
 //C R U D
 
 //Admin use
@@ -36,11 +78,11 @@ export const getAllUser = async()=>{
 }
 
 export const updateUser = async(userId,userData)=>{
-  const { name, lastname,email,role,image_filename} = userData
+  const { name, lastname,email,role} = userData
   const {rows} = await query(`
-    UPDATE users SET name=$1,lastname=$2,email=$3,role=$4,image_filename=$5
+    UPDATE users SET name=$1,lastname=$2,email=$3,role=$4
     WHERE user_id=$6
-    RETURNING*`,[name,lastname,email,role,image_filename,userId])
+    RETURNING*`,[name,lastname,email,role,userId])
   return rows[0]
 }
 

@@ -123,18 +123,7 @@ const Navbar = () => {
     getUser();
   }, []);
 
-  const userLogout = async()=>{
-    const confirm = window.confirm("ต้องการออกจากระบบ?")
-    if(confirm){
-      try {
-        const res = await users.logoutUser()
-        navigate("/")
-      } catch (err) {
-        console.log(err)
-        
-      }
-    }
-  }
+ 
   const handleResultClick = async (productId) => {
     setSearchTerm("");
     setResult([]);
@@ -321,7 +310,7 @@ const Navbar = () => {
                   {name && login && (
                     <>
                     <p className="text-white font-semibold truncate max-w-[120px] sm:max-w-[150px] ">{name}</p>
-                    <button onClick={userLogout} className=" px-2 py-4 rounded-xl font-medium bg-white cursor-pointer">ลงชื่อออก</button>
+                   
                     </>
                   )}
                 </div>

@@ -25,3 +25,14 @@ export const uploadUser = async(formData)=>{
     );
 }
 
+export const getOneUser = async(email)=>{
+    return await axios.get(`${import.meta.env.VITE_API}/user/info/${email}`)
+}
+
+export const userEditInfo = async(email,userData)=>{
+    return  await axios.put(`${import.meta.env.VITE_API}/user/info/${email}`,userData)
+}
+
+export const updatePassword = async(email,currentPassword,newPassword)=>{
+    return await axios.put(`${import.meta.env.VITE_API}/user/password/${email}`,{currentPassword,newPassword})
+}

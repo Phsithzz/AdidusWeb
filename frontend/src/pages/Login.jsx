@@ -1,38 +1,39 @@
 import { useState } from "react";
 import "./login.css";
-import { Link,  useNavigate } from "react-router-dom";
-import * as user from "../function/user.js"
+import { Link, useNavigate } from "react-router-dom";
+import * as user from "../function/user.js";
 function Login() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [login, setLogin] = useState(null);
   const [message, setMessage] = useState("");
 
-  const navigate = useNavigate()
-  
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const res = await user.login({email,password})
-      setLogin(res.data.login)
-      setMessage(res.data.message)
-      if(res.data.login === true){
-        navigate("/user/info")
+      const res = await user.login({ email, password });
+      setLogin(res.data.login);
+      setMessage(res.data.message);
+      if (res.data.login === true) {
+        if (res.data.user.role === "user") navigate("/user/info");
+        else if (res.data.user.role === "admin") navigate("/admin/products");
+        setEmail("");
+        setPassword("");
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       if (err.response && err.response.data) {
-      setLogin(false);
-      setMessage(err.response.data.message || "Login failed");
-    } else {
-      setLogin(false);
-      setMessage("Server error");
+        setLogin(false);
+        setMessage(err.response.data.message || "Login failed");
+      } else {
+        setLogin(false);
+        setMessage("Server error");
+      }
     }
-      
-    }
-  }
+  };
   return (
     <div className="login-container">
       <div className="login-box">
@@ -47,13 +48,13 @@ function Login() {
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label className="email-title">Email</label>
-            <input 
-            type="email" 
-            placeholder="Email"
-             className="input-email" 
-             onChange={(e)=>setEmail(e.target.value)}
-             required
-             />
+            <input
+              type="email"
+              placeholder="Email"
+              className="input-email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="input-group">
@@ -62,21 +63,28 @@ function Login() {
               type="password"
               placeholder="Password"
               className="input-password"
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          <button type="submit" className="login-btn hover:bg-black hover:scale-105 transition-all duration-300">
+          <button
+            type="submit"
+            className="login-btn hover:bg-black hover:scale-105 transition-all duration-300"
+          >
             Login
           </button>
         </form>
         {message && (
-  <p className={` font-semibold text-xs ${login ? "text-green-400" : "text-red-500"}`}>
-    {login ? "เข้าสู่ระบบสำเร็จ - " : "เข้าสู่ระบบผิดพลาด - "}
-    {message}
-  </p>
-)}
+          <p
+            className={` font-semibold text-xs ${
+              login ? "text-green-400" : "text-red-500"
+            }`}
+          >
+            {login ? "เข้าสู่ระบบสำเร็จ - " : "เข้าสู่ระบบผิดพลาด - "}
+            {message}
+          </p>
+        )}
         <p className="signup-link mt-4">
           Don't have an account? <Link to="/register">Sign up here</Link>
         </p>

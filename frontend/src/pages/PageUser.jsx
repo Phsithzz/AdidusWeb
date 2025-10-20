@@ -28,8 +28,13 @@ const PageUser = () => {
   const [message, setMessage] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
-  const [file, setFile] = useState(null);
+  // เพิ่ม state สำหรับเก็บค่าชั่วคราว
+  const [tempName, setTempName] = useState("");
+  const [tempLastname, setTempLastname] = useState("");
+  const [tempEmail, setTempEmail] = useState("");
 
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   useEffect(() => {
     getUser();
   }, []);
@@ -61,29 +66,39 @@ const PageUser = () => {
       .catch((err) => console.log(err.message));
   };
   const userLogout = async () => {
-  
-      try {
-        await users.logoutUser();
-        setShowLogout(false)
-        navigate("/");
-      } catch (err) {
-        console.log(err);
-      }
-    
+    try {
+      await users.logoutUser();
+      setShowLogout(false);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleOpenEditUser = () => {
+    setTempName(name);
+    setTempLastname(lastname);
+    setTempEmail(email);
+    setEditUser(true);
   };
 
   const handleUpdateInfo = async () => {
-    if (!name || !lastname || !email) {
+    if (!tempName || !tempLastname || !tempEmail) {
       setEditMessage("กรุณากรอกข้อมูลให้ครบทุกช่อง");
       return;
     }
 
-    const userData = { name, lastname, email };
+    const userData = {
+      name: tempName,
+      lastname: tempLastname,
+      email: tempEmail,
+    };
     try {
-      const res = await users.userEditInfo(email, userData);
+      await users.userEditInfo(tempEmail, userData);
+      setName(tempName);
+      setLastname(tempLastname);
+      setEmail(tempEmail);
       setEditMessage("อัปเดตข้อมูลสำเร็จ ✅");
       setEditUser(false);
-      console.log("Updated user:", res.data);
     } catch (err) {
       console.log(err);
       setEditMessage("อัปเดตข้อมูลล้มเหลว ❌");
@@ -101,17 +116,13 @@ const PageUser = () => {
     }
 
     try {
-      const res = await users.updatePassword(
-        email,
-        currentPassword,
-        newPassword
-      );
+      await users.updatePassword(email, currentPassword, newPassword);
       setEditPassword(false);
       // เคลียร์ input
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setEditMessage("")
+      setEditMessage("");
     } catch (err) {
       console.log(err);
       setEditMessage(
@@ -133,7 +144,11 @@ const PageUser = () => {
   };
 
   const onFileChange = async (e) => {
-    setFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
   };
   const uploadFile = async () => {
     if (!file) {
@@ -149,7 +164,8 @@ const PageUser = () => {
       const res = await users.uploadUser(formData);
       setMessage(res.message);
       checkImage();
-      setEditImage(false)
+      setPreview(null);
+      setEditImage(false);
     } catch (err) {
       console.log(err);
       setMessage("Upload Fail");
@@ -161,8 +177,8 @@ const PageUser = () => {
       <Navbar />
       <div className="bg-white w-full">
         <div className="max-w-7xl mx-auto p-10 mt-8">
-          <div className="flex gap-4 flex-wrap justify-between">
-            <div className="flex flex-col space-y-8 w-[25%">
+          <div className="flex gap-4  justify-between">
+            <div className="flex flex-col space-y-8 w-[25%] ">
               <h1 className="text-2xl font-semibold">ภาพรวมบัญชี</h1>
 
               <div className="flex flex-col space-y-2">
@@ -219,16 +235,24 @@ const PageUser = () => {
                     <img
                       src={
                         imageUser
-                          ? `${import.meta.env.VITE_API}/img_users/${email}.jpg?${Date.now()}`
+                          ? `${
+                              import.meta.env.VITE_API
+                            }/img_users/${email}.jpg?${Date.now()}`
                           : `${import.meta.env.VITE_API}/img_users/default.jpg`
                       }
                       alt={email}
                       className="rounded-full w-[200px] h-[200px] bg-contain"
                     />
+
                     <div className="flex absolute cursor-pointer bottom-0 rounded-full w-12 h-12 items-center justify-center right-0 gap-2 bg-black ">
-                        <FaRegEdit onClick={() => setEditImage(true)} 
-                          className="text-white text-xl font-semibold"/>
-             
+                      <FaRegEdit
+                        onClick={() => {
+                          setPreview(null); // ✅ reset preview ทุกครั้งก่อนเปิด modal
+                          setFile(null);
+                          setEditImage(true);
+                        }}
+                        className="text-white text-xl font-semibold"
+                      />
                     </div>
                   </div>
 
@@ -236,39 +260,52 @@ const PageUser = () => {
                     <>
                       <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/30   z-50">
                         <div className="relative bg-white w-[500px]  rounded-2xl  p-6">
+                           <button
+                                onClick={() => {
+                                  setPreview(null); // ✅ reset ตอนปิด
+                                  setFile(null);
+                                  setEditImage(false);
+                                }}
+                              >
+                                <RxCross2 className="absolute top-2 right-2  cursor-pointer text-[#7f7f7f] hover:text-[#b80000] text-2xl" />
+                              </button>
                           <div className="flex flex-col justify-center items-center space-y-4">
                             <h1 className="text-2xl font-semibold ">
                               แก้ไขรูปภาพโปรไฟล์
                             </h1>
-                            <img
-                              src={
-                                imageUser
-                                  ? `${
-                                      import.meta.env.VITE_API
-                                    }/img_users/${email}.jpg`
-                                  : `${
-                                      import.meta.env.VITE_API
-                                    }/img_users/default.jpg`
-                              }
-                              alt={email}
-                              className="rounded-full w-[200px] h-[200px] bg-contain"
-                            />
-                            <div className="flex flex-col justify-center space-y-2">
-                              <input
-                                type="file"
-                                className="border "
-                                onChange={onFileChange}
+                            <div className="flex flex-col relative">
+                              <img
+                                src={
+                                  preview
+                                    ? preview
+                                    : imageUser
+                                    ? `${
+                                        import.meta.env.VITE_API
+                                      }/img_users/${email}.jpg`
+                                    : `${
+                                        import.meta.env.VITE_API
+                                      }/img_users/default.jpg`
+                                }
+                                alt={email}
+                                className="rounded-full w-[200px] h-[200px] bg-contain"
                               />
-                              <button
+                              <label className="flex absolute cursor-pointer bottom-0 rounded-full w-12 h-12 items-center justify-center right-0 gap-2 bg-black">
+                                <FaRegEdit className="text-white text-xl font-semibold" />
+                                <input
+                                  type="file"
+                                  className="hidden"
+                                  onChange={onFileChange}
+                                />
+                              </label>
+                             
+                             
+                            </div>
+                             <button
                                 onClick={uploadFile}
                                 className="mt-2 px-4 py-2 border cursor-pointer bg-black text-white rounded-md hover:bg-white hover:text-black trantsition ease-in duration-200"
                               >
                                 เปลี่ยนรูปภาพ
                               </button>
-                              <button onClick={() => setEditImage(false)}>
-                                <RxCross2 className="absolute top-2 right-2  cursor-pointer text-[#7f7f7f] hover:text-[#b80000] text-2xl" />
-                              </button>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -293,7 +330,7 @@ const PageUser = () => {
                       <button
                         type="button"
                         className="text-lg underline font-semibold cursor-pointer"
-                        onClick={() => setEditUser(true)}
+                        onClick={handleOpenEditUser}
                       >
                         แก้ไข
                       </button>
@@ -315,10 +352,12 @@ const PageUser = () => {
                                       ชื่อ
                                     </label>
                                     <input
-                                      onChange={(e) => setName(e.target.value)}
+                                      onChange={(e) =>
+                                        setTempName(e.target.value)
+                                      }
                                       type="text"
                                       id="username"
-                                      value={name}
+                                      value={tempName}
                                       className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                     />
                                   </div>
@@ -331,11 +370,11 @@ const PageUser = () => {
                                     </label>
                                     <input
                                       onChange={(e) =>
-                                        setLastname(e.target.value)
+                                        setTempLastname(e.target.value)
                                       }
                                       type="text"
                                       id="lastnameuser"
-                                      value={lastname}
+                                      value={tempLastname}
                                       className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                     />
                                   </div>
@@ -347,10 +386,12 @@ const PageUser = () => {
                                       อีเมล
                                     </label>
                                     <input
-                                      onChange={(e) => setEmail(e.target.value)}
+                                      onChange={(e) =>
+                                        setTempEmail(e.target.value)
+                                      }
                                       type="email"
                                       id="useemailusername"
-                                      value={email}
+                                      value={tempEmail}
                                       className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                     />
                                   </div>
@@ -406,9 +447,7 @@ const PageUser = () => {
                     <div className="flex flex-wrap justify-between border-b-2 p-2 border-gray-300">
                       <div className="flex flex-wrap items-center gap-4 ">
                         <FaLock className="text-2xl font-semibold " />
-                        <p className="text-lg font-semibold ">
-                          รายละเอียดบัญชี
-                        </p>
+                        <p className="text-lg font-semibold ">รหัสผ่าน</p>
                       </div>
                       <button
                         type="button"
@@ -480,7 +519,9 @@ const PageUser = () => {
                                   </div>
                                   {editMessage && (
                                     <>
-                                      <p className="text-md pl-2 font-medium  text-red-500">{editMessage}</p>
+                                      <p className="text-md pl-2 font-medium  text-red-500">
+                                        {editMessage}
+                                      </p>
                                     </>
                                   )}
                                 </form>

@@ -13,6 +13,8 @@ import PageUser from "./pages/PageUser";
 import LayoutCart from "./layouts/LayoutCart";
 import LayoutProductDetail from "./layouts/LayoutProductDetail";
 import LayoutPay from "./layouts/LayoutPay";
+import LayoutAdminProduct from "./layouts/LayoutAdminProduct";
+
 const App = () => {
   return (
     <>
@@ -56,6 +58,12 @@ const App = () => {
               element={<ProductBrand brand="NewBalance" />}
             />
           </Route>
+
+          {/* Admin  */}
+          <Route path="admin/products" element={<LayoutAdminProduct/>}/>
+          
+     
+          
           <Route path="products" element={<LayoutProduct />} />
           <Route path="brands" element={<LayoutBrand />} />
           <Route path="products/:id" element={<LayoutProductDetail />} />

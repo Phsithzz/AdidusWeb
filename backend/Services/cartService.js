@@ -63,18 +63,18 @@ export const updateCartQuantity = async(cartId,newQuantity)=>{
     return rows || null
 }
 
-//เอาไว้ออัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
+//เอาไว้อัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
 export const confirmCart = async(customerEmail) =>{
     
     const cartItem = await query(`SELECT * FROM cart WHERE customer_email=$1`,[customerEmail])
     if(cartItem.rows.length ===0) return null
 
-    const totalPrice = cartItem.rows.reduct((sum,item)=>sum + Number(item.price) * item.quantity,0  )
+    const totalPrice = cartItem.rows.reduce((sum,item)=>sum + Number(item.price) * item.quantity,0  )
 
     const order = await query(`
         INSERT INTO orders(customer_email,total_price,status)
         VALUES($1,$2,true) RETURNING*
-        `,[customerEmail,totalPrice])
+        `,[customerEmail,totalPrice])   
     await query("UPDATE cart SET status=true WHERE customer_email=$1",[customerEmail])
 
     return order.rows[0]

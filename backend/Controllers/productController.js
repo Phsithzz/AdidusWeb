@@ -1,7 +1,33 @@
 import * as productService from "../Services/productService.js";
-
+import multer from "multer"
 //C R U D
 
+// upload part
+// กำหนดตำแหน่งที่จะเก็บ file ที่ upload --> img_users
+const storage = multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,"img_products")
+  },
+  filename:function(req,file,cb){
+    const filename = `${req.body.name}.jpg`
+    cb(null,filename)
+
+  }
+})
+// จำกัดประเภทของไฟล์ที่อัปโหลด
+export const upload = multer({
+    storage: storage,
+}).single('image');
+
+
+//ส่วน Upload File
+// export const uploadUser = async(req,res)=>{
+//   console.log("Upload User Image")
+//   upload(req,res,(err)=>{
+//     if(err) return res.status(400).json({message:err.message})
+//     res.status(200).json({message:"File uploaded successfully"})
+//   })
+// }
 //Admin use
 export const createProduct = async (req, res) => {
   console.log("POST /products is request")
@@ -18,6 +44,21 @@ export const createProduct = async (req, res) => {
   }
 };
 
+
+export const getProductAdmin = async (req, res) => {
+  console.log("GET /products is request")
+  try {
+    const product = await productService.getProductAdmin();
+    res.status(200).json(product);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Server error getProduct",
+      error: err.message,
+    });
+  }
+};
+//สำหรับส่วนuser
 export const getProduct = async (req, res) => {
   console.log("GET /products is request")
   try {
@@ -31,13 +72,17 @@ export const getProduct = async (req, res) => {
     });
   }
 };
-
+//สำหรับแอดมิน
 export const updateProduct = async (req, res) => {
-  console.log("PUT /products/:productId is request")
+  console.log("PUT /products/admin/:productId is request")
   try {
     const {productId} = req.params;
     const productData = req.body;
 
+    if(req.file){
+      productData.image_filename = req.file.filename
+    }
+    
     const updateProduct = await productService.updateProduct(
       productId,
       productData

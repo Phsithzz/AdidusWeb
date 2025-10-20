@@ -3,8 +3,32 @@ import Navbar from "../components/Navbar";
 import Category from "../components/Category";
 import Hero from "../components/Hero";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import * as user from "../function/user.js";
 
 const LayoutHome = () => {
+   const navigate = useNavigate();
+
+   useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await user.getUser();
+        console.log("user", res.data.role);
+
+        // ถ้ามี user และ role เป็น admin ให้ไปหน้า admin
+        if (res.data.role === "admin") {
+          navigate("/admin/products");
+        }
+
+        // ถ้ายังไม่มี user (ยังไม่ login) ก็ไม่ต้องทำอะไร
+      } catch (err) {
+        console.log("ไม่พบผู้ใช้หรือ token หมดอายุ", err);
+      }
+    };
+
+    checkUser();
+  }, [navigate]);
   return (
     <>
       <div className="flex flex-col">

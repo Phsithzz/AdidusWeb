@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar"
 import ProductDetail from "../pages/ProductDetail"
 import SlideProduct from "../components/SlideProduct"
-import { useState } from "react"
 const LayoutProductDetail = () => {
 
   return (

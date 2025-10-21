@@ -7,110 +7,186 @@ import * as product from "../function/product.js";
 import ConfirmDelete from "../components/ConfirmDelete.jsx";
 import EditProduct from "../components/EditProduct.jsx";
 
-const ProductTable = () => {
+const ProductTable = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
 
   const [showEdit, setShowEdit] = useState(false);
 
   const [confirm, setConfirm] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await product.getProductAdmin();
-        setProducts(res.data);
+        let res;
+        if (searchTerm) {
+       
+          res = await product.searchProduct(searchTerm);
+        } else {
+     
+          res = await product.getProductAdmin();
+        }
+        setProducts(res.data || res); 
       } catch (err) {
         setError(err.message);
         console.log(err);
       }
     };
     fetchData();
-  }, []);
+  }, [searchTerm]);
+
+  const displayedProducts = products;
+
+
+  const handleSaveProduct = (updatedProduct) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.product_id === updatedProduct.product_id ? updatedProduct : p
+      )
+    );
+    setShowEdit(false); 
+  };
+
+  const handleDeleteProduct = (id) => {
+    setProducts((prev) => prev.filter((p) => p.product_id !== id));
+    setConfirm(false); 
+  };
+
   return (
     <>
-      {error && <div className="text-red-500">error</div>}
+      {error && <div className="text-red-500 p-4">Error: {error}</div>}
       <div className="overflow-x-auto p-4">
-        <table className="border border-gray-300 rounded-lg text-center w-full min-w-[1000px]">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="p-3 border">รหัสสินค้า</th>
-              <th className="p-3 border">ชื่อสินค้า</th>
-              <th className="p-3 border">หมวดหมู่</th>
-              <th className="p-3 border">ราคา</th>
-              <th className="p-3 border">จำนวนสต๊อก</th>
-              <th className="p-3 border">รูปภาพ</th>
-              <th className="p-3 border">แบรนด์</th>
-              <th className="p-3 border">รายละเอียดสินค้า</th>
-              <th className="p-3 border">จัดการ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.product_id} className="hover:bg-gray-50">
-                <td className="p-3 border">{product.product_id}</td>
-                <td className="p-3 border">{product.name}</td>
-                <td className="p-3 border">{product.description}</td>
-                <td className="p-3 border">{product.price}</td>
-                <td className="p-3 border">{product.stock_quantity}</td>
-                <td className="p-3 border">
-                  <img
-                    src={`${import.meta.env.VITE_API}/img_products/${
-                      product.image_filename
-                    }.jpg`}
-                    alt={product.name}
-                    className="w-20 h-20 object-cover mx-auto rounded"
-                  />
-                </td>
-                <td className="p-3 border">{product.brand}</td>
-                {/* ต้องทำเป็นปุ่มแล้วกดเข้าไปดูเป็นpop up */}
-                <td className="p-3 border">{product.detail}</td>
-                <td className="p-3 border flex justify-center gap-2">
-                  <button 
-                  onClick={()=>{setSelectedProduct(product);setShowEdit(true)}}
-                  className="bg-blue-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center gap-1">
-                    <FiEdit /> แก้ไข
-                  </button>
-                  <button
-                    onClick={() => { setSelectedProduct(product); setConfirm(true)}}
-                    className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-red-600 flex items-center gap-1"
-                  >
-                    <RiDeleteBinLine /> ลบ
-                  </button>
-                </td>
+        {/* Container สำหรับ table ที่มีเงาและขอบมน */}
+        <div className="shadow-sm overflow-hidden rounded-lg border border-gray-200">
+          <table className="text-left w-full min-w-[1000px]">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
+                  รหัสสินค้า
+                </th>
+                <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
+                  ชื่อสินค้า
+                </th>
+                <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
+                  หมวดหมู่
+                </th>
+                <th className="px-4 py-3 font-medium  text-gray-500 uppercase tracking-wider text-sm text-center">
+                  ราคา
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-smtext-center">
+                  จำนวนสต๊อก
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-sm text-center">
+                  รูปภาพ
+                </th>
+                <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
+                  แบรนด์
+                </th>
+                <th className="px-4 py-3 font-medium  text-gray-500 uppercase tracking-wider text-sm text-center">
+                  รายละเอียด
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-sm text-center">
+                  จัดการ
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {showEdit &&(
-            <>
-            <div className="fixed top-0 right-0 flex justify-center items-center bg-black/50 w-full h-full z-50">
-                <div className="bg-white rounded-2xl p-6 w-[800px]">
-                    <EditProduct
-                    product={selectedProduct}
-                    onSave={((updateProduct)=>{
-                        setProducts(prev=>prev.map(p=> p.product_id === updateProduct.product_id? updateProduct:p))
-                    })}
-                    onCancel={()=>setShowEdit(false)}
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-300">
+              {displayedProducts.map((product) => (
+                <tr key={product.product_id} className="hover:bg-gray-50">
+                  <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-900 font-medium">
+                    {product.product_id}
+                  </td>
+                  <td className="px-4 py-4 text-center text-sm text-gray-900 font-medium ">
+                    {product.name}
+                  </td>
+                  <td className="px-4 py-4 text-center text-sm text-gray-700">
+                    {product.description}
+                  </td>
+                  <td className="px-4 py-4 text-centerwhitespace-nowrap text-sm text-gray-700 text-centert">
+                    {product.price}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-center">
+                    {product.stock_quantity}
+                  </td>
+                  <td className="px-4  py-4 whitespace-nowrap text-center">
+                    <img
+                      src={`${import.meta.env.VITE_API}/img_products/${
+                        product.image_filename
+                      }.jpg`}
+                      alt={product.name}
+                      className="w-16 h-16 object-cover mx-auto rounded" // ปรับขนาดรูปเล็กน้อย
                     />
-                </div>
-            </div>
-            </>
-        )}
-        {confirm && (
-          <>
-            <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/30   z-50">
-              <div className=" bg-white w-[500px]  rounded-2xl  p-6">
-                <ConfirmDelete 
-                product={selectedProduct}
-                onDelete={(id) => setProducts(prev => prev.filter(p => p.product_id !== id))}
-                onCancel={()=>setConfirm(false)}
-                />
-              </div>
-            </div>
-          </>
-        )}
+                  </td>
+                  <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-700">
+                    {product.brand}
+                  </td>
+                  {/* ทำให้เป็นปุ่มตามคอมเมนต์ */}
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
+                    <button
+                      onClick={() => alert(product.detail)} // เปลี่ยน alert เป็น modal ของคุณ
+                      className="text-blue-600 hover:text-blue-800 text-xs py-1 px-2 rounded border border-blue-200 hover:bg-blue-50"
+                    >
+                      ดูรายละเอียด
+                    </button>
+                  </td>
+                  {/* แก้ไขโครงสร้าง HTML ที่ผิด และจัดปุ่มให้อยู่ตรงกลาง */}
+                  <td className="px-4 py-4 whitespace-nowrap text-center">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setShowEdit(true);
+                        }}
+                        className="bg-gray-800 cursor-pointer text-white px-3 py-1.5 rounded-md hover:bg-gray-700 flex items-center gap-1.5 text-sm"
+                      >
+                        <FiEdit size={14} /> แก้ไข
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setConfirm(true);
+                        }}
+                        className="bg-red-500 cursor-pointer text-white px-3 py-1.5 rounded-md hover:bg-red-600 flex items-center gap-1.5 text-sm"
+                      >
+                        <RiDeleteBinLine size={14} /> ลบ
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Modals (ส่วนนี้ดีอยู่แล้ว) */}
+      {showEdit && (
+        <>
+          <div className="fixed top-0 right-0 flex justify-center items-center bg-black/50 w-full h-full z-50">
+            <div className="bg-white rounded-2xl p-6 w-[800px]">
+              <EditProduct
+                product={selectedProduct}
+                onSave={handleSaveProduct}
+                onCancel={() => setShowEdit(false)}
+              />
+            </div>
+          </div>
+        </>
+      )}
+      {confirm && (
+        <>
+          <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/30  z-50">
+            <div className=" bg-white w-[500px]  rounded-2xl  p-6">
+              <ConfirmDelete
+                product={selectedProduct}
+                onDelete={handleDeleteProduct}
+                onCancel={() => setConfirm(false)}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

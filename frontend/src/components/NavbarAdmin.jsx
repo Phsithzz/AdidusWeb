@@ -2,8 +2,12 @@ import { MdProductionQuantityLimits } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import { useState } from "react";
 
-const NavbarAdmin = () => {
+const NavbarAdmin = ({onSearch}) => {
     const [isFocus,setFocus] = useState(false)
+
+    const handleSearchChange= async(e)=>{
+      onSearch(e.target.value)
+    }
   return (
     <>
         <div className="flex flex-wrap justify-between items-center p-4">
@@ -17,13 +21,14 @@ const NavbarAdmin = () => {
                     isFocus ? "w-100 " : "w-40 sm:w-64"
                   }`}>
                 <input type="text" placeholder="Search"
+                onChange={handleSearchChange}
                 onFocus={()=>setFocus(true)}
                 className=" outline-none " />
                 <IoMdSearch size={20} />
 
             </div>
 
-            <button className="flex items-center gap-4 bg-black px-4 py-2 hover:bg-white group hover:border rounded-md  text-center cursor-pointer transition ease-in duration-200">
+            <button className="flex items-center gap-4 border bg-black px-4 py-2 hover:bg-white group hover:border rounded-md  text-center cursor-pointer transition ease-in duration-200">
                 <p className="text-lg font-semiboสd text-white group-hover:text-black ">เพิ่มสินค้า</p>
             </button>
 

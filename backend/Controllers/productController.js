@@ -4,16 +4,16 @@ import multer from "multer"
 
 // upload part
 // กำหนดตำแหน่งที่จะเก็บ file ที่ upload --> img_users
-const storage = multer.diskStorage({
-  destination:function(req,file,cb){
-    cb(null,"img_products")
-  },
-  filename:function(req,file,cb){
-    const filename = `${req.body.name}.jpg`
-    cb(null,filename)
+  const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+      cb(null,"img_products")
+    },
+    filename:function(req,file,cb){
+      const filename = `${req.body.name}.jpg`
+      cb(null,filename)
 
-  }
-})
+    }
+  })
 // จำกัดประเภทของไฟล์ที่อัปโหลด
 export const upload = multer({
     storage: storage,
@@ -79,8 +79,12 @@ export const updateProduct = async (req, res) => {
     const {productId} = req.params;
     const productData = req.body;
 
-    if(req.file){
-      productData.image_filename = req.file.filename
+// ตรวจสอบว่ามีการอัปโหลดไฟล์ใหม่ไหม
+    if (req.file) {
+      productData.image_filename = req.file.filename;
+    } else if (req.body.existingImage) {
+      // ถ้าไม่มีการอัปโหลดใหม่ ให้ใช้ชื่อไฟล์เดิม
+      productData.image_filename = req.body.existingImage;
     }
     
     const updateProduct = await productService.updateProduct(
@@ -131,7 +135,7 @@ export const searchProduct = async (req, res) => {
       return res.json([])
     }
     
-    const product = await productService.searchProduc(searchTerm);
+    const product = await productService.searchProduct(searchTerm);
     
     res.status(200).json(product);
   } catch (err) {

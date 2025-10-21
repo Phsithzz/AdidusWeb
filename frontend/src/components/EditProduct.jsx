@@ -41,11 +41,17 @@ const EditProduct = ({ product, onCancel, onSave }) => {
     formData.append("stock_quantity", tempProductStock);
     formData.append("brand", tempProductBrand);
     formData.append("detail", tempProductDetail);
-    if (image) formData.append("image", image);
+  if (image) {
+  formData.append("image", image);
+} else {
+  // ถ้าไม่ได้เลือกไฟล์ใหม่ ให้ส่งชื่อไฟล์เดิมไปด้วย
+  formData.append("existingImage", product.image_filename);
+}
+
 
     try {
       const res = await updateProduct(product.product_id, formData);
-
+console.log("อัปเดตรูป:", res.data);
       const updatedProduct = {
         ...product,
         name: tempProductName,

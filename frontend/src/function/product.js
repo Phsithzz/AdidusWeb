@@ -14,6 +14,7 @@ export const updateProduct = async(productId,productData)=>{
 export const  deleteProduct = async(productId)=>{
     return await axios.delete(`${import.meta.env.VITE_API}/products/${productId}`)
 }
+
 //admin
 export const getProduct = async()=>{
     return await axios.get(`${import.meta.env.VITE_API}/products`)

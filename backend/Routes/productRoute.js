@@ -4,7 +4,7 @@ import * as productController from "../Controllers/productController.js";
 const router = express.Router();
 
 // 🟢 Routes สำหรับ admin ก่อน
-router.post("/products", productController.createProduct);
+router.post("/products/admin", productController.upload,productController.createProduct);
 router.get("/products/admin", productController.getProductAdmin);
 router.put("/products/admin/:productId",productController.upload, productController.updateProduct);
 

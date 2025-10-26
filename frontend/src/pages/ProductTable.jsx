@@ -1,43 +1,38 @@
 import React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
-import * as product from "../function/product.js";
 import ConfirmDelete from "../components/ConfirmDelete.jsx";
 import EditProduct from "../components/EditProduct.jsx";
 
-const ProductTable = ({ searchTerm }) => {
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
-
+const ProductTable = ({ searchTerm, products, setProducts }) => {
   const [showEdit, setShowEdit] = useState(false);
 
   const [confirm, setConfirm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let res;
-        if (searchTerm) {
-       
-          res = await product.searchProduct(searchTerm);
-        } else {
-     
-          res = await product.getProductAdmin();
+  const displayProducts = Array.isArray(products)
+    ? products.filter((product) => {
+        if (!product) {
+          return false;
         }
-        setProducts(res.data || res); 
-      } catch (err) {
-        setError(err.message);
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [searchTerm]);
 
-  const displayedProducts = products;
+        const term = searchTerm.toLowerCase();
 
+        const nameMatch =
+          product.name && product.name.toLowerCase().includes(term);
+        const descMatch =
+          product.description &&
+          product.description.toLowerCase().includes(term);
+        const brandMatch =
+          product.brand && product.brand.toLowerCase().includes(term);
+        const categoryMatch =
+          product.category_name &&
+          product.category_name.toLowerCase().includes(term);
+
+        return nameMatch || descMatch || brandMatch || categoryMatch;
+      })
+    : [];
 
   const handleSaveProduct = (updatedProduct) => {
     setProducts((prev) =>
@@ -45,25 +40,26 @@ const ProductTable = ({ searchTerm }) => {
         p.product_id === updatedProduct.product_id ? updatedProduct : p
       )
     );
-    setShowEdit(false); 
+    setShowEdit(false);
   };
 
   const handleDeleteProduct = (id) => {
     setProducts((prev) => prev.filter((p) => p.product_id !== id));
-    setConfirm(false); 
+    setConfirm(false);
   };
 
   return (
     <>
-      {error && <div className="text-red-500 p-4">Error: {error}</div>}
       <div className="overflow-x-auto p-4">
-        {/* Container สำหรับ table ที่มีเงาและขอบมน */}
         <div className="shadow-sm overflow-hidden rounded-lg border border-gray-200">
-          <table className="text-left w-full min-w-[1000px]">
+          <table className="w-full min-w-[1000px] border-collapse border border-gray-300]">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
                   รหัสสินค้า
+                </th>
+                <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
+                  การแสดงผล
                 </th>
                 <th className="px-4 py-3 font-medium text-center text-gray-500 uppercase tracking-wider text-sm">
                   ชื่อสินค้า
@@ -76,6 +72,9 @@ const ProductTable = ({ searchTerm }) => {
                 </th>
                 <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-smtext-center">
                   จำนวนสต๊อก
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-smtext-center">
+                  ชื่อรูปภาพ
                 </th>
                 <th className="px-4 py-3 font-medium text-gray-500 uppercase tracking-wider text-sm text-center">
                   รูปภาพ
@@ -92,10 +91,13 @@ const ProductTable = ({ searchTerm }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-300">
-              {displayedProducts.map((product) => (
-                <tr key={product.product_id} className="hover:bg-gray-50">
+              {displayProducts.map((product) => (
+                <tr key={product.product_id} className="hover:bg-gray-50 ">
                   <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-900 font-medium">
                     {product.product_id}
+                  </td>
+                  <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-900 font-medium">
+                    {product.category_name}
                   </td>
                   <td className="px-4 py-4 text-center text-sm text-gray-900 font-medium ">
                     {product.name}
@@ -109,12 +111,15 @@ const ProductTable = ({ searchTerm }) => {
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-center">
                     {product.stock_quantity}
                   </td>
-                  <td className="px-4  py-4 whitespace-nowrap text-center">
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-center">
+                    {product.image_filename}
+                  </td>
+                  <td className="px-4 flex flex-col  gap-2 py-4 whitespace-nowrap text-center">
                     <img
                       src={`${import.meta.env.VITE_API}/img_products/${
                         product.image_filename
                       }.jpg`}
-                      alt={product.name}
+                      alt={product.image_filename}
                       className="w-16 h-16 object-cover mx-auto rounded" // ปรับขนาดรูปเล็กน้อย
                     />
                   </td>
@@ -176,7 +181,7 @@ const ProductTable = ({ searchTerm }) => {
       )}
       {confirm && (
         <>
-          <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/30  z-50">
+          <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/50  z-50">
             <div className=" bg-white w-[500px]  rounded-2xl  p-6">
               <ConfirmDelete
                 product={selectedProduct}

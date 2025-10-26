@@ -5,6 +5,12 @@ export const getProductAdmin = async()=>{
     return await axios.get(`${import.meta.env.VITE_API}/products/admin`)
 }
 
+export const createProduct = async(productData)=>{
+    return await  axios.post(`${import.meta.env.VITE_API}/products/admin`,productData,{
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+}
+
 export const updateProduct = async(productId,productData)=>{
     return await axios.put(`${import.meta.env.VITE_API}/products/admin/${productId}`,productData,{
         headers: { "Content-Type": "multipart/form-data" },
@@ -20,9 +26,7 @@ export const getProduct = async()=>{
     return await axios.get(`${import.meta.env.VITE_API}/products`)
 }
 
-export const createProduct = async()=>{
-    return await axios.post(`${import.meta.env.VITE_API}/products`)
-}
+
 export const searchProduct = async(searchTerm)=>{
     return await axios.get(`${import.meta.env.VITE_API}/products/search?q=${searchTerm}`)
 }

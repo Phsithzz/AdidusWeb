@@ -1,5 +1,7 @@
 import * as productService from "../Services/productService.js";
 import multer from "multer"
+import fs from "fs";
+import path from "path";
 //C R U D
 
 // upload part
@@ -9,7 +11,7 @@ import multer from "multer"
       cb(null,"img_products")
     },
     filename:function(req,file,cb){
-      const filename = `${req.body.name}.jpg`
+      const filename = `${req.body.image_filename}.jpg`
       cb(null,filename)
 
     }
@@ -33,6 +35,10 @@ export const createProduct = async (req, res) => {
   console.log("POST /products is request")
   try {
     const productData = req.body;
+      if (!req.file) {
+    return res.status(400).json({ message: "กรุณาอัพโหลดรูปภาพ" });
+  }
+  productData.image_filename = req.file.filename.replace(/\.[^/.]+$/, "");
     const newproduct = await productService.createProduct(productData);
     res.status(201).json(newproduct);
   } catch (err) {
@@ -79,13 +85,38 @@ export const updateProduct = async (req, res) => {
     const {productId} = req.params;
     const productData = req.body;
 
-// ตรวจสอบว่ามีการอัปโหลดไฟล์ใหม่ไหม
+    let oldFilename = req.body.existingImage;
+    let newFilename = req.body.image_filename;
+
+    // 1️ ถ้ามีการอัปโหลดไฟล์ใหม่ — ก็ใช้ชื่อจากไฟล์นั้นเลย
     if (req.file) {
-      productData.image_filename = req.file.filename;
-    } else if (req.body.existingImage) {
-      // ถ้าไม่มีการอัปโหลดใหม่ ให้ใช้ชื่อไฟล์เดิม
-      productData.image_filename = req.body.existingImage;
+      productData.image_filename = req.file.filename.replace(/\.[^/.]+$/, "");
     }
+
+    // 2️ ถ้าไม่มีไฟล์ใหม่ แต่มีการเปลี่ยนชื่อในฟอร์ม
+    else if (newFilename && newFilename !== oldFilename) {
+      const oldPath = path.join("img_products", `${oldFilename}.jpg`);
+      const newPath = path.join("img_products", `${newFilename}.jpg`);
+
+      try {
+        if (fs.existsSync(oldPath)) {
+          fs.renameSync(oldPath, newPath);
+          console.log(` Renamed image file: ${oldFilename}.jpg → ${newFilename}.jpg`);
+        } else {
+          console.log(` Old file not found: ${oldFilename}.jpg`);
+        }
+      } catch (err) {
+        console.error(" Error renaming file:", err);
+      }
+
+      productData.image_filename = newFilename;
+    }
+
+    // 3️⃣ ถ้าไม่ได้เปลี่ยนชื่อเลย
+    else if (oldFilename) {
+      productData.image_filename = oldFilename;
+    }
+
     
     const updateProduct = await productService.updateProduct(
       productId,

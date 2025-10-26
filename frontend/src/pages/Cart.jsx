@@ -94,7 +94,7 @@ const Cart = () => {
       <div className="w-full bg-white">
         <div className="max-w-5xl mx-auto   p-10 mt-8">
           <div className="flex justify-between gap-6">
-            <div className="flex flex-col w-[70%] space-y-4">
+            <div className="flex flex-col w-[65%] space-y-4">
               <h1 className="text-2xl font-semibold ">ตะกร้า</h1>
               {carts.length === 0 ? (
                 <>
@@ -112,7 +112,7 @@ const Cart = () => {
                           src={`${import.meta.env.VITE_API}/img_products/${
                             cart.image_filename
                           }.jpg`}
-                          className="w-30 h-30 object-cover"
+                          className="w-30 h-30 object-contain"
                           alt={cart.name}
                         />
                       </Link>
@@ -177,7 +177,7 @@ const Cart = () => {
                 ))
               )}
             </div>
-            <div className="flex flex-col w-[30%] space-y-8">
+            <div className="flex flex-col w-[35%] space-y-8">
               <h1 className="text-2xl font-semibold ">สรุป</h1>
               <div className="flex flex-col space-y-4">
                 <div className="border-b-2 pb-4 space-y-2 border-gray-300 ">
@@ -201,17 +201,7 @@ const Cart = () => {
                     </>
                   ))}
 
-                  {/* <div className="flex items-center justify-between mt-10 ">
-                    <p className="text-md font-semibold  ">ยอดรวมย่อย</p>
-
-                    <p className="text-xs tracking-wide  font-semibold">
-                      {new Intl.NumberFormat("th-TH", {
-                        style: "currency",
-                        currency: "THB",
-                        minimumFractionDigits: 0,
-                      }).format(totalPrice)}
-                    </p>
-                  </div> */}
+      
                 </div>
 
                 <div className="flex justify-between border-b-2 border-gray-300">

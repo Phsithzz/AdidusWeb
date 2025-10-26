@@ -7,12 +7,13 @@ const EditProduct = ({ product, onCancel, onSave }) => {
   const [tempProductDescription, setTempProductDescription] = useState("");
   const [tempProductPrice, setTempProductPrice] = useState("");
   const [tempProductStock, setTempProductStock] = useState("");
+  const [tempProductImageName, setTempProductImageName] = useState("");
   const [image, setImage] = useState(null);
   const [tempProductBrand, setTempProductBrand] = useState("");
+  const [tempProductCategory, setTempProductCategory] = useState("");
   const [tempProductDetail, setTempProductDetail] = useState("");
 
   const [preview, setPreview] = useState(null);
-  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if (product) {
@@ -20,15 +21,15 @@ const EditProduct = ({ product, onCancel, onSave }) => {
       setTempProductDescription(product.description);
       setTempProductPrice(product.price);
       setTempProductStock(product.stock_quantity);
-
+      setTempProductImageName(product.image_filename);
       setTempProductBrand(product.brand);
       setTempProductDetail(product.detail);
+      setTempProductCategory(product.category_name);
     }
   }, [product]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
     setImage(selectedFile);
     setPreview(URL.createObjectURL(selectedFile));
   };
@@ -37,21 +38,22 @@ const EditProduct = ({ product, onCancel, onSave }) => {
     const formData = new FormData();
     formData.append("name", tempProductName);
     formData.append("description", tempProductDescription);
-    formData.append("price", tempProductPrice);
-    formData.append("stock_quantity", tempProductStock);
+    formData.append("price", Number(tempProductPrice));
+    formData.append("stock_quantity", Number(tempProductStock));
+    formData.append("image_filename", tempProductImageName);
+    formData.append("category_name", tempProductCategory);
     formData.append("brand", tempProductBrand);
     formData.append("detail", tempProductDetail);
-  if (image) {
-  formData.append("image", image);
-} else {
-  // ถ้าไม่ได้เลือกไฟล์ใหม่ ให้ส่งชื่อไฟล์เดิมไปด้วย
-  formData.append("existingImage", product.image_filename);
-}
-
+    if (image) {
+      formData.append("image", image);
+    } else {
+      // ถ้าไม่ได้เลือกไฟล์ใหม่ ให้ส่งชื่อไฟล์เดิมไปด้วย
+      formData.append("existingImage", product.image_filename);
+    }
 
     try {
-      const res = await updateProduct(product.product_id, formData);
-console.log("อัปเดตรูป:", res.data);
+      await updateProduct(product.product_id, formData);
+
       const updatedProduct = {
         ...product,
         name: tempProductName,
@@ -59,8 +61,9 @@ console.log("อัปเดตรูป:", res.data);
         price: tempProductPrice,
         stock_quantity: tempProductStock,
         brand: tempProductBrand,
+        category_name: tempProductCategory,
         detail: tempProductDetail,
-        image_filename:res.data.image_filename
+        image_filename: tempProductImageName,
       };
 
       onSave(updatedProduct); // ส่ง object ใหม่ไป
@@ -74,7 +77,7 @@ console.log("อัปเดตรูป:", res.data);
     <>
       <div className="flex flex-col space-y-4">
         <h1 className="text-center text-2xl font-semibold">
-          แก้ไขรายละเอียดสินค้า{" "}
+          แก้ไขรายละเอียดสินค้า
         </h1>
         <div className="flex justify-between gap-4">
           <form className="flex flex-col w-full">
@@ -83,7 +86,7 @@ console.log("อัปเดตรูป:", res.data);
               <input
                 type="text"
                 value={tempProductName}
-                onChange={(e)=>setTempProductName(e.target.value)}
+                onChange={(e) => setTempProductName(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="name"
               />
@@ -93,7 +96,7 @@ console.log("อัปเดตรูป:", res.data);
               <input
                 type="text"
                 value={tempProductDescription}
-                onChange={(e)=>setTempProductDescription(e.target.value)}
+                onChange={(e) => setTempProductDescription(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="cate"
               />
@@ -103,7 +106,7 @@ console.log("อัปเดตรูป:", res.data);
               <input
                 type="number"
                 value={tempProductPrice}
-                onChange={(e)=>setTempProductPrice(e.target.value)}
+                onChange={(e) => setTempProductPrice(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="price"
               />
@@ -111,9 +114,9 @@ console.log("อัปเดตรูป:", res.data);
             <div className="flex flex-col space-2">
               <label htmlFor="stock">จำนวนสต๊อก</label>
               <input
-                type="text"
+                type="number"
                 value={tempProductStock}
-                onChange={(e)=>setTempProductStock(e.target.value)}
+                onChange={(e) => setTempProductStock(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="stock"
               />
@@ -124,7 +127,7 @@ console.log("อัปเดตรูป:", res.data);
               <input
                 type="text"
                 value={tempProductBrand}
-                onChange={(e)=>setTempProductBrand(e.target.value)}
+                onChange={(e) => setTempProductBrand(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="brand"
               />
@@ -134,14 +137,42 @@ console.log("อัปเดตรูป:", res.data);
               <input
                 type="text"
                 value={tempProductDetail}
-                onChange={(e)=>setTempProductDetail(e.target.value)}
+                onChange={(e) => setTempProductDetail(e.target.value)}
                 className="border border-gray-300 px-2 py-2 rounded-md"
                 id="detail"
               />
             </div>
+            <div className="flex flex-col space-2">
+              <label htmlFor="status">ประเภทการแสดงผล</label>
+              <select
+                id="status"
+                className="border rounded px-3 py-2"
+                value={tempProductCategory}
+                onChange={(e) => setTempProductCategory(e.target.value)}
+              >
+          
+                <option>shoe</option>
+                <option>show</option>
+              </select>
+            </div>
           </form>
 
           <div className="flex flex-col space-2">
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="imageName">
+                ชื่อไฟล์รูปภาพ{" "}
+                <span className="text-red-500">
+                  (ตัวอย่างการตั้งชื่อ Filename.jpg)
+                </span>
+              </label>
+              <input
+                type="text"
+                value={tempProductImageName}
+                onChange={(e) => setTempProductImageName(e.target.value)}
+                id="imageName"
+                className="border border-gray-300 px-2 py-2 rounded-md"
+              />
+            </div>
             <label htmlFor="image">รูปภาพ</label>
             <input
               type="file"
@@ -154,7 +185,7 @@ console.log("อัปเดตรูป:", res.data);
                 <img
                   src={preview}
                   alt="preview"
-                  className="w-80 h-80 object-contain   "
+                  className="w-80 h-80 object-contain rounded-full  "
                 />
               ) : product.image_filename ? (
                 <img

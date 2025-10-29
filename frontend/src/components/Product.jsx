@@ -37,17 +37,29 @@ const Product = () => {
           
           <div key={group.category}>
             <div className="p-4">
-              <h1 className="text-3xl text-left font-bold mb-4 bg-black text-white w-fit p-4 rounded-xl transitio ease-in duration-200 hover:bg-white hover:border-2 cursor-pointer hover:text-black">
-                {group.displayName}
-              </h1>
+               <button
+                  type="button"
+     
+                  className="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-4 rounded-md
+             border border-black bg-black transition-colors duration-500 group"
+                >
+                  <span className="relative z-10 text-3xl"> {group.displayName}</span>
+                  <span
+                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+               from-transparent via-white/80 to-transparent 
+               skew-x-[-25deg] transition-all duration-700 ease-in-out 
+               group-hover:left-[125%]"
+                  ></span>
+                </button>
+            
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 space-y-8 mx-4 my-6">
               {group.items.map((product) => (
                 
                 <div
                   key={product.product_id}
-                  className="flex flex-col hover:border rounded-md  shadow-xl space-y-2 p-4 transition-transform duration-300 ease-in-out overflow-hidden
-             hover:scale-115"
+                  className="flex flex-col hover:border hover:border-[#DCDCDC] rounded-xl bg-white  shadow-xl space-y-2 p-4 transition-transform duration-300 ease-in-out overflow-hidden
+             hover:scale-110"
                 >
                   <Link to={`/products/${product.product_id}`}>
                   <div className="flex justify-center items-center">

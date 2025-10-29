@@ -5,13 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import * as cart from "../function/cart.js";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa6";
-
+import Swal from "sweetalert2";
 const Cart = () => {
   const [email, setEmail] = useState(null);
   const [login, setLogin] = useState(false);
   const navigate = useNavigate();
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+ 
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -79,6 +80,42 @@ const Cart = () => {
   const totalPrice = carts.reduce((total, item) => {
     return total + item.quantity * item.price;
   }, 0);
+
+  const checkLengthCart = ()=>{
+    if(carts.length == 0 ){
+       Swal.fire({
+              html: `
+            <div class="flex flex-col items-center space-y-4">
+              <p class="text-center text-md font-semibold">ไม่มีสินค้าในตะกร้า!</p>
+              <button id="go" class="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+                border border-black bg-black transition-colors duration-500 group">
+                <span class="relative z-10">ตกลง</span>
+                <span class="absolute top-0 left-[-75%] w-1/2 h-full bg-gradient-to-r 
+                  from-transparent via-white/80 to-transparent skew-x-[-25deg] 
+                  transition-all duration-700 ease-in-out group-hover:left-[125%]"></span>
+              </button>
+            </div>
+          `,
+              icon: "error",
+              showConfirmButton: false,
+              background: "white",
+              width: 500,
+              padding: "2rem",
+              didOpen: () => {
+                const btn = document.getElementById("go"); // bind ให้ตรงปุ่มจริง
+                if (btn) {
+                  btn.addEventListener("click", () => {
+                    Swal.close(); // ปิด popup
+                  });
+                }
+              },
+            });
+      return
+    }
+    else{
+      navigate('/pay')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -214,13 +251,24 @@ const Cart = () => {
                     }).format(totalPrice)}
                   </p>
                 </div>
-                <Link
-                  to="/pay"
-                  type="button"
-                  className="font-semibold text-md text-center text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-2 rounded-full cursor-pointer"
-                >
-                  เช็คเอาท์
-                </Link>
+                 <button
+                 onClick={checkLengthCart}
+                   
+                                        type="button"
+                                  className="cursor-pointer  text-center w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-full 
+             border border-black bg-black transition-colors duration-500 group"
+                                >
+                                  <span className="relative z-10">
+                                    เช็คเอาท์
+                                  </span>
+                                  <span
+                                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+               from-transparent via-white/80 to-transparent 
+               skew-x-[-25deg] transition-all duration-700 ease-in-out 
+               group-hover:left-[125%]"
+                                  ></span>
+                                </button>
+             
               </div>
             </div>
           </div>

@@ -64,7 +64,7 @@ const SlideProduct = () => {
               <Link to={`/products/${show.product_id}`}>
               
               <div
-                className="flex flex-col  hover:border transition-all ease-in space-y-2 p-4 cursor-pointer"
+                className="flex flex-col  border border-white hover:border-black transition-all ease-in space-y-2 p-4 cursor-pointer"
                 key={show.product_id}
               >
                 <div className="flex justify-center items-center">

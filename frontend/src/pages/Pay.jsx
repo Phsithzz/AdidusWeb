@@ -6,8 +6,9 @@ import pay3 from "../assets/pay3.png";
 
 import * as cart from "../function/cart.js";
 import { getUser } from "../function/user";
-import SuccessPay from "../components/SuccessPay";
 
+import Swal from "sweetalert2";
+import success from "../assets/success.png";
 const selectPay = [
   {
     id: 1,
@@ -31,7 +32,6 @@ const Pay = () => {
 
   const [activeTab, setActiveTab] = useState("address");
 
-  const [showSuccess, setShowSuccess] = useState(false);
 
   const [selectedPay, setSelectedPay] = useState(null);
 
@@ -44,7 +44,6 @@ const Pay = () => {
     postal_code: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("");
-
 
   useEffect(() => {
     const checkEmail = async () => {
@@ -70,27 +69,89 @@ const Pay = () => {
     loadData();
   }, [email]);
 
-    const handleChange = (e) => {
+  const handleChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
 
-  const handleConfirm = async()=>{
-    if(!address.house_number||!address.village_number||!address.subdistrict||!address.district||!address.province||!address.postal_code||!paymentMethod){
-      alert("กรุณากรอกที่อยู่และเลือกวิธีการชำระเงิน")  
-      return
+  const handleConfirm = async () => {
+    if (
+      !address.house_number ||
+      !address.village_number ||
+      !address.subdistrict ||
+      !address.district ||
+      !address.province ||
+      !address.postal_code ||
+      !paymentMethod
+    ) {
+      Swal.fire({
+        html: `
+      <div class="flex flex-col items-center space-y-4">
+        <p class="text-center text-md font-semibold">เฮ้! อย่าลืมใส่ที่อยู่และเลือกวิธีชำระเงินนะ!</p>
+        <button id="go" class="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+          border border-black bg-black transition-colors duration-500 group">
+          <span class="relative z-10">ตกลง</span>
+          <span class="absolute top-0 left-[-75%] w-1/2 h-full bg-gradient-to-r 
+            from-transparent via-white/80 to-transparent skew-x-[-25deg] 
+            transition-all duration-700 ease-in-out group-hover:left-[125%]"></span>
+        </button>
+      </div>
+    `,
+        icon: "error",
+        showConfirmButton: false,
+        background: "white",
+        width: 500,
+        padding: "2rem",
+        didOpen: () => {
+          const btn = document.getElementById("go"); // bind ให้ตรงปุ่มจริง
+          if (btn) {
+            btn.addEventListener("click", () => {
+              Swal.close(); // ปิด popup
+            });
+          }
+        },
+      });
+
+      return;
     }
 
     try {
-      console.log(address)
-      
-      const res = await cart.confirmCart(email,address,paymentMethod)
-      console.log(res.data)
-      setShowSuccess(true)  
+      console.log(address);
+
+      const res = await cart.confirmCart(email, address, paymentMethod);
+      console.log(res.data);
+
+      Swal.fire({
+        html: `
+      <div class="flex flex-col justify-center items-center space-y-4">
+        <img src="${success}" class="w-40 h-40" />
+        <p class="text-center text-2xl font-semibold">คำสั่งซื้อของคุณได้รับการยืนยันแล้ว</p>
+            <button id="confirmOrder" class="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+          border border-black bg-black transition-colors duration-500 group">
+          <span class="relative z-10">ตกลง</span>
+          <span class="absolute top-0 left-[-75%] w-1/2 h-full bg-gradient-to-r 
+            from-transparent via-white/80 to-transparent skew-x-[-25deg] 
+            transition-all duration-700 ease-in-out group-hover:left-[125%]"></span>
+        </button>
+      </div>
+    `,
+        showConfirmButton: false,
+        background: "white",
+        width: 500,
+        padding: "2rem",
+        didOpen: () => {
+          const btn = document.getElementById("confirmOrder");
+          if (btn) {
+            btn.addEventListener("click", () => {
+              Swal.close();
+              window.location.href = "/cart";
+            });
+          }
+        },
+      });
     } catch (err) {
-      console.log(err)
-      
+      console.log(err);
     }
-  }
+  };
   const totalPrice = carts.reduce((total, item) => {
     return total + item.quantity * item.price;
   }, 0);
@@ -321,7 +382,7 @@ const Pay = () => {
                     }).format(totalPrice)}
                   </p>
                 </div>
-                 <button
+                <button
                   type="button"
                   onClick={handleConfirm}
                   className="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-full 
@@ -347,15 +408,7 @@ const Pay = () => {
             </div>
           </div>
         </div>
-        {showSuccess && (
-          <>
-            <div className="fixed top-0 right-0 z-50 flex items-center justify-center bg-black/50 w-full h-full">
-              <div className="bg-white w-[600px] rounded-2xl p-6">
-                <SuccessPay onCancel={() => setShowSuccess(false)} />
-              </div>
-            </div>
-          </>
-        )}
+     
       </div>
     </>
   );

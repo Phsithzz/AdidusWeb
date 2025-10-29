@@ -25,9 +25,20 @@ const ProductCategory = ({ category }) => {
   return (
     <>
       <div className="p-2">
-        <h1 className="text-3xl text-left font-bold mb-4 bg-black text-white w-fit p-4 rounded-xl transitio ease-in duration-200 hover:bg-white hover:border-2 cursor-pointer hover:text-black">
-          {category}
-        </h1>
+    <button
+                  type="button"
+     
+                  className="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-4 rounded-md
+             border border-black bg-black transition-colors duration-500 group"
+                >
+                  <span className="relative z-10 text-3xl"> {category}</span>
+                  <span
+                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+               from-transparent via-white/80 to-transparent 
+               skew-x-[-25deg] transition-all duration-700 ease-in-out 
+               group-hover:left-[125%]"
+                  ></span>
+                </button>
       </div>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
         {product.map((cate) => (
@@ -35,7 +46,8 @@ const ProductCategory = ({ category }) => {
           
           <div
             key={cate.product_id}
-            className="flex flex-col hover:border transition-all ease-in  space-y-2 p-4  "
+            className="flex flex-col   rounded-xl bg-white  hover:border hover:border-[#DCDCDC] shadow-xl space-y-2 p-4 transition-transform duration-300 ease-in-out overflow-hidden
+             hover:scale-110 "
           >
             <div className="flex justify-center items-center  ">
               <img

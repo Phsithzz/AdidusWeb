@@ -22,7 +22,8 @@ const HomeProduct = () => {
           <Link to={`/products/${product.product_id}`}>
                  <div
             key={product.product_id}
-            className="flex flex-col hover:border transition-all ease-in  space-y-2 p-4  "
+            className="flex flex-col  hover:border hover:border-[#DCDCDC] rounded-xl bg-white  shadow-xl space-y-2 p-4 transition-transform duration-300 ease-in-out overflow-hidden
+             hover:scale-110 "
           >
             <div className="flex justify-center items-center  ">
               <img

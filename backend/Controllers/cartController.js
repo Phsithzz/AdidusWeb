@@ -1,4 +1,5 @@
 import * as cartService from "../Services/cartService.js"
+import {query} from "../Config/database.js"
 
 //เอาไว้ใช้เช็คว่า user มีตระกร้าอยู่่แล้วรึป่าว
 export const checkCart = async(req,res)=>{
@@ -77,6 +78,21 @@ export const getCart  = async(req,res)=>{
     }
 }
 
+//เอาไว้โชว์สรุปข้อมูลการสั่งซื้อสินค้าของลูกค้า
+export const getCartOrder = async(req,res)=>{
+    console.log("GET /cart/order/:customerEmail")
+    try {
+        const {customerEmail} = req.params
+        const cart = await cartService.getCartOrder(customerEmail)
+        res.status(200).json(cart)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server erorr getCartOrder"
+        })
+        
+    }
+}
 //เอาไว้ใช้อัพเดทปริมาณสินค้าในตระกร้า
 export const updateCartQuantity = async(req,res)=>{
     console.log("PUT /cart/:cartId")
@@ -109,8 +125,22 @@ export const confirmCart = async(req,res)=>{
     console.log("PUT /cart/confirm/:customerEmail is request")
     try {
         const {customerEmail} = req.params
-        const order = await cartService.confirmCart(customerEmail)
+        const { address, payment_method } = req.body; 
+      const { house_number, village_number, subdistrict, district, province, postal_code } = address;
+
+
+        const addressRes = await query(
+            `INSERT INTO address(house_number,village_number,subdistrict,district,province,postal_code)
+            VALUES($1,$2,$3,$4,$5,$6) 
+            RETURNING address_id`,
+            [house_number,village_number,subdistrict,district,province,postal_code]
+        )
+        const addressId = addressRes.rows[0].address_id
+
+        const order = await cartService.confirmCart(customerEmail,addressId,payment_method)
+
         if(!order) return res.status(400).json({message:"No item to confirm"})
+
         res.status(200).json(order)
     } catch (err) {
         console.log(err)

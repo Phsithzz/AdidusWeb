@@ -8,8 +8,8 @@ router.post("/variant", variantController.createVariant);
 
 router.get("/variant", variantController.getVariant);
 
-router.put("/variant/:id", variantController.updateVariant);
+router.put("/variant/:variantId", variantController.updateVariant);
 
-router.delete("/variant/:id", variantController.deleteVariant);
+router.delete("/variant/:variantId", variantController.deleteVariant);
 
 export default router;

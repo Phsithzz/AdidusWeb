@@ -13,10 +13,19 @@ export const getCart = async(customerEmail)=>{
     return await axios.get(`${import.meta.env.VITE_API}/cart/${customerEmail}`)
 }
 
+export const getCartOrder = async(customerEmail)=>{
+return await axios.get(`${import.meta.env.VITE_API}/cart/order/${customerEmail}`)
+}
+
 export const updateCartQuantity = async(cartId,quantity)=>{
     return await axios.put(`${import.meta.env.VITE_API}/cart/${cartId}`,{ newQuantity: quantity })
 }
 
 export const removeCart = async(cartId)=>{
     return await axios.delete(`${import.meta.env.VITE_API}/cart/${cartId}`)
+}
+
+export const confirmCart = async(customerEmail,address,paymentMethod)=>{
+    return await axios.put(`${import.meta.env.VITE_API}/cart/confirm/${customerEmail}`,{address,          // ส่ง address object
+    payment_method: paymentMethod})
 }

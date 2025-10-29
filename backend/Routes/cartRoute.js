@@ -10,6 +10,7 @@ router.put("/cart/admin/:cartId", cartController.updateCart);
 router.delete("/cart/admin/:cartId", cartController.removeCart);
 
 // 🔹 Route สำหรับลูกค้า (static ก่อน dynamic)
+router.get("/cart/order/:customerEmail",cartController.getCartOrder)
 router.post("/cart/checkcart", cartController.checkCart);
 router.post("/cart/addcart", cartController.addCart);
 router.put("/cart/confirm/:customerEmail", cartController.confirmCart);

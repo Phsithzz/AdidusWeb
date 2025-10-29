@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link,  useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import * as products from "../function/product.js";
 import { TbRulerMeasure } from "react-icons/tb";
 import { HiOutlineChevronDown } from "react-icons/hi";
@@ -49,20 +49,20 @@ const ProductDetail = () => {
 
   const [message, setMessage] = useState("");
 
-  const [sizeShow,setSizeShow] = useState(false)
-  
+  const [sizeShow, setSizeShow] = useState(false);
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        // 👈 เพิ่ม try
+
         const resId = await products.getProductId(id);
-        console.log("ข้อมูลสินค้าที่ได้รับ:", resId.data); // 👈 เพิ่ม log เพื่อเช็คข้อมูล
+        console.log("ข้อมูลสินค้าที่ได้รับ:", resId.data);
         setProduct(resId.data);
 
         window.scrollTo(0, 0);
       } catch (error) {
         // 👈 เพิ่ม catch
-        console.error("โหลดข้อมูลสินค้าไม่สำเร็จ:", error); // 👈 บรรทัดนี้จะแสดง Error ใน Console ถ้า API ล้มเหลว
+        console.error("โหลดข้อมูลสินค้าไม่สำเร็จ:", error);
       }
     };
     loadData();
@@ -97,37 +97,32 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     setMessage("");
-    // 1. ตรวจสอบว่าผู้ใช้เลือกไซส์ (variant) แล้วหรือยัง
+
     if (!selectedVariant) {
       setMessage("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
       return; // หยุดการทำงาน
     }
 
     try {
-      // 2. เช็คสถานะการล็อกอินล่าสุดจาก Server โดยตรง
       const userRes = await user.getUser();
       const isLoggedIn = userRes.data.login;
       const userEmail = userRes.data.email;
 
-      // 3. ถ้าไม่ได้ล็อกอิน ให้แจ้งเตือน
       if (!isLoggedIn) {
         setMessage("คุณยังไม่ได้ Login ต้อง Login ก่อนซื้อสินค้า");
         return;
       }
 
-      // 4. ถ้าล็อกอินแล้ว: เตรียมข้อมูลเพื่อส่งไปที่ Backend
       const cartData = {
         customer_email: userEmail,
         variant_id: selectedVariant.variant_id,
-        quantity: 1, // ตอนนี้ยังไม่มีตัวเลือกจำนวน ให้ใส่เป็น 1 ไปก่อน
+        quantity: 1,
         price: product.price,
       };
 
-      // 5. เรียกใช้ API addCart
       console.log("Sending data to cart:", cartData);
       const cartRes = await cart.addCart(cartData);
 
-      // 6. แสดงข้อความบอกผู้ใช้ว่าสำเร็จ
       if (cartRes.data.cartOK) {
         window.scrollTo({ top: 0, behavior: "smooth" });
         setShowCart(true);
@@ -136,7 +131,6 @@ const ProductDetail = () => {
         // หรือจะใช้ State แสดงผลสวยๆ
         console.log("Add to cart response:", cartRes.data.messageAddCart);
       } else {
-        // กรณีเกิดข้อผิดพลาดจากฝั่ง Backend
         alert(cartRes.data.messageAddCart || "เกิดข้อผิดพลาดในการเพิ่มสินค้า");
       }
     } catch (err) {
@@ -225,16 +219,16 @@ const ProductDetail = () => {
                   <p className="font-semibold text-xl">เลือกไซส์</p>
                   <button
                     type="button"
-                    onClick={()=>setSizeShow(true)}
-                    className="flex items-center gap-2 font-semibold underline"
+                    onClick={() => setSizeShow(true)}
+                    className="flex items-center gap-2 font-semibold underline cursor-pointer"
                   >
                     <TbRulerMeasure />
                     <span>คำแนะนำไซต์</span>
                   </button>
-                  {sizeShow &&(
+                  {sizeShow && (
                     <div className="fixed top-0 left-0 w-full h-full backdrop-blur-xs flex justify-center items-center z-50">
-                  <SizeShoe onCancel={() => setSizeShow(false)} />
-                </div>
+                      <SizeShoe onCancel={() => setSizeShow(false)} />
+                    </div>
                   )}
                 </div>
                 <div className="grid grid-cols-3 gap-2 ">
@@ -243,7 +237,11 @@ const ProductDetail = () => {
                       type="button"
                       disabled={v.stock_quantity === 0}
                       key={v.variant_id}
-                      onClick={() => setSelectedVariant((prev)=>prev?.variant_id === v.variant_id?null :v)}
+                      onClick={() =>
+                        setSelectedVariant((prev) =>
+                          prev?.variant_id === v.variant_id ? null : v
+                        )
+                      }
                       className={`border-2 text-center border-gray-400 rounded-md px-4 transition ease-in  py-2 cursor-pointer
                           ${
                             v.stock_quantity === 0
@@ -263,10 +261,18 @@ const ProductDetail = () => {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="font-semibold text-md text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
+                  className="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-full 
+             border border-black bg-black transition-colors duration-500 group"
                 >
-                  <span>เพิ่มในตระกร้า</span>
+                  <span className="relative z-10">เพิ่มในตะกร้า</span>
+                  <span
+                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+               from-transparent via-white/80 to-transparent 
+               skew-x-[-25deg] transition-all duration-700 ease-in-out 
+               group-hover:left-[125%]"
+                  ></span>
                 </button>
+
                 {message && (
                   <p className="text-red-500 text-sm font-semibold">
                     {message}

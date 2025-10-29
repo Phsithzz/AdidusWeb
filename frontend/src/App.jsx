@@ -14,6 +14,7 @@ import LayoutCart from "./layouts/LayoutCart";
 import LayoutProductDetail from "./layouts/LayoutProductDetail";
 import LayoutPay from "./layouts/LayoutPay";
 import LayoutAdminProduct from "./layouts/LayoutAdminProduct";
+import LayoutAdminVariant from "./layouts/LayoutAdminVariant";
 
 const App = () => {
   return (
@@ -61,7 +62,8 @@ const App = () => {
 
           {/* Admin  */}
           <Route path="admin/products" element={<LayoutAdminProduct/>}/>
-          
+          <Route path="admin/variant" element={<LayoutAdminVariant/>}/>
+           {/* Admin  */}
      
           
           <Route path="products" element={<LayoutProduct />} />

@@ -15,7 +15,7 @@ export const createVariant = async (variantData) => {
 };
 
 export const getVariant = async () => {
-  const { rows } = await query("SELECT * FROM product_variants");
+  const { rows } = await query("SELECT * FROM product_variants ORDER BY product_id ASC");
   return rows;
 };
 

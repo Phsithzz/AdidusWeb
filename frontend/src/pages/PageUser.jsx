@@ -8,7 +8,9 @@ import { BiSolidUserDetail } from "react-icons/bi";
 import { FaLock } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
+import { RiBillLine } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import CartOrder from "./CartOrder.jsx";
 const PageUser = () => {
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
@@ -25,7 +27,7 @@ const PageUser = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [imageUser, setImageUser] = useState(false);
-  const [message, setMessage] = useState(null);
+
   const [editMessage, setEditMessage] = useState(null);
 
   // เพิ่ม state สำหรับเก็บค่าชั่วคราว
@@ -35,6 +37,9 @@ const PageUser = () => {
 
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  const [activeTab,setActiveTab] = useState("profile")
+
   useEffect(() => {
     getUser();
   }, []);
@@ -175,21 +180,28 @@ const PageUser = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white w-full">
-        <div className="max-w-7xl mx-auto p-10 mt-8">
+      <div className="bg-[#EEEEEE] w-full min-h-screen">
+        <div className="max-w-7xl mx-auto p-10 ">
           <div className="flex gap-4  justify-between">
             <div className="flex flex-col space-y-8 w-[25%] ">
               <h1 className="text-2xl font-semibold">ภาพรวมบัญชี</h1>
 
               <div className="flex flex-col space-y-2">
-                <div className="flex flex-wrap gap-6 cursor-pointer">
+
+                <div onClick={()=>setActiveTab("profile")} className={`flex flex-wrap gap-6 items-center   cursor-pointer ${activeTab === "profile" ? "font-bold text-red-500" : "text-black"}`}>
                   <FaRegUser />
-                  <p>โปรไฟล์</p>
+                  <p className="text-md hover:text-red-500 transition ease-in duration-200">โปรไฟล์</p>
                 </div>
+
+                 <div onClick={()=>setActiveTab("order")} className={`flex flex-wrap gap-6 items-center  cursor-pointer ${activeTab === "order" ? "font-bold text-red-500" : "text-black"}`}>
+              <RiBillLine />
+                  <p >การซื้อของฉัน</p>
+                </div>
+
                 <div className="flex items-center gap-6 cursor-pointer">
                   <RiLogoutBoxLine />
                   <button
-                    className="cursor-pointer  "
+                    className="cursor-pointer text-md hover:text-red-500 transition ease-in duration-200"
                     onClick={() => setShowLogout(true)}
                   >
                     ออกจากระบบ
@@ -229,7 +241,9 @@ const PageUser = () => {
             </div>
 
             <div className="w-[75%]">
-              <div className="flex flex-col space-y-4">
+              {activeTab === "profile" &&(
+                <>
+                    <div className="flex flex-col space-y-4">
                 <div className="flex flex-wrap item-center gap-20">
                   <div className="flex flex-col relative  ">
                     <img
@@ -517,13 +531,13 @@ const PageUser = () => {
                                       className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                     />
                                   </div>
-                                  {editMessage && (
+                                  {/* {editMessage && (
                                     <>
                                       <p className="text-md pl-2 font-medium  text-red-500">
                                         {editMessage}
                                       </p>
                                     </>
-                                  )}
+                                  )} */}
                                 </form>
                                 <div className="flex gap-4  justify-between">
                                   <button
@@ -556,6 +570,16 @@ const PageUser = () => {
                   </div>
                 </div>
               </div>
+                </>
+              )}
+          {activeTab === "order" &&(
+            <>
+     
+                <CartOrder email={email}/>
+
+          
+            </>
+          )}
             </div>
           </div>
         </div>

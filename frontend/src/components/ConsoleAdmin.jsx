@@ -91,37 +91,37 @@ const ConsoleAdmin = () => {
         <div className="flex flex-col  fixed top-10 justify-center space-y-4 p-8">
           <div className="flex items-center gap-4">
             <MdProductionQuantityLimits size={30} color="white" />
-            <p className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/products" className="text-md text-white font-medium cursor-pointer">
               Products List
-            </p>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <GiStack size={30} color="white" />
-            <p className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/variant" className="text-md text-white font-medium cursor-pointer">
               Products Variants List
-            </p>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <RiUserSearchLine size={30} color="white" />
-            <p className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/users" className="text-md text-white font-medium cursor-pointer">
               User List
-            </p>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <FiShoppingCart size={30} color="white" />
-            <p className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/cart" className="text-md text-white font-medium cursor-pointer">
               Cart List
-            </p>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <AiOutlineOrderedList size={30} color="white" />
-            <p className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/orders" className="text-md text-white font-medium cursor-pointer">
               Orders List
-            </p>
+            </Link>
           </div>
         </div>
         <div className="fixed bottom-6 flex flex-col mt-auto items-center  space-y-4">

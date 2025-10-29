@@ -9,7 +9,7 @@ export const createVariant = async (req, res) => {
   try {
     const variantData = req.body;
     const newvariant = await variantService.createVariant(variantData);
-    res.status(201).json(newvariant);
+    res.status(200).json(newvariant);
   } catch (err) {
     console.log(err);
     res.status(500).json({

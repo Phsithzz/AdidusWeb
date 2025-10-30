@@ -43,13 +43,14 @@ const EditProfileAdmin = ({
       email: tempEmail,
     };
     try {
-      await user.userEditInfo(tempEmail, userData);
+      await user.userEditInfo(email, userData);
       setName(tempName);
       setLastname(tempLastname);
       setEmail(tempEmail);
       onCancel();
     } catch (err) {
       console.log(err);
+      alert("Update failed");
     }
   };
 
@@ -70,10 +71,10 @@ if (selectedFile) {
     setLoading(true);
     try {
       await user.uploadUser(formData);
-      checkImage(); // refresh รูปที่ parent
+      checkImage(); 
       setFile(null);
       setPreview(null);
-    onCancel()  
+      onCancel()  
     } catch (err) {
       console.log(err);
       alert("Upload Fail");

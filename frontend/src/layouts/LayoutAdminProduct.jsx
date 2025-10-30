@@ -34,6 +34,7 @@ const LayoutAdmin = () => {
           <NavbarAdmin 
           onSearch={setSearchTerm} 
           setProducts={setProducts}
+          
           />
 
           <ProductTable 

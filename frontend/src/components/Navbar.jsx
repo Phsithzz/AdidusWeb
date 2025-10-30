@@ -1,4 +1,4 @@
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 import iconMobile from "../assets/iconMobile.png"
 import hero1 from "../assets/hero1.svg";
 import hero2 from "../assets/hero2.jpg";

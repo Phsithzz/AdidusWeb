@@ -28,7 +28,8 @@ const PageUser = () => {
 
   const [imageUser, setImageUser] = useState(false);
 
-  const [editMessage, setEditMessage] = useState(null);
+  const [editMessageUser, setEditMessageUser] = useState(null);
+  const [editMessagePassword, setEditMessagePassword] = useState(null);
   const [message, setMessage] = useState(null);
   // เพิ่ม state สำหรับเก็บค่าชั่วคราว
   const [tempName, setTempName] = useState("");
@@ -88,7 +89,7 @@ const PageUser = () => {
 
   const handleUpdateInfo = async () => {
     if (!tempName || !tempLastname || !tempEmail) {
-      setEditMessage("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      setEditMessageUser("กรุณากรอกข้อมูลให้ครบทุกช่อง");
       return;
     }
 
@@ -102,21 +103,21 @@ const PageUser = () => {
       setName(tempName);
       setLastname(tempLastname);
       setEmail(tempEmail);
-      setEditMessage("อัปเดตข้อมูลสำเร็จ ✅");
+      setEditMessageUser("อัปเดตข้อมูลสำเร็จ ✅");
       setEditUser(false);
     } catch (err) {
       console.log(err);
-      setEditMessage("อัปเดตข้อมูลล้มเหลว ❌");
+      setEditMessageUser("อัปเดตข้อมูลล้มเหลว ❌");
     }
   };
 
   const handleUpdatePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setEditMessage("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      setEditMessagePassword("กรุณากรอกข้อมูลให้ครบทุกช่อง");
       return;
     }
     if (newPassword !== confirmPassword) {
-      setEditMessage("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน");
+      setEditMessagePassword("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน");
       return;
     }
 
@@ -127,10 +128,10 @@ const PageUser = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setEditMessage("");
+      setEditMessagePassword("");
     } catch (err) {
       console.log(err);
-      setEditMessage(
+      setEditMessagePassword(
         err.response?.data?.message || "เปลี่ยนรหัสผ่านล้มเหลว ❌"
       );
     }
@@ -444,9 +445,9 @@ const PageUser = () => {
                                         />
                                       </div>
 
-                                      {editMessage && (
+                                      {editMessageUser && (
                                         <>
-                                          <p>{editMessage}</p>
+                                          <p className="text-md pl-2 font-medium  text-red-500">{editMessageUser}</p>
                                         </>
                                       )}
                                     </form>
@@ -578,10 +579,10 @@ const PageUser = () => {
                                           className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                         />
                                       </div>
-                                      {editMessage && (
+                                      {editMessagePassword && (
                                     <>
                                       <p className="text-md pl-2 font-medium  text-red-500">
-                                        {editMessage}
+                                        {editMessagePassword}
                                       </p>
                                     </>
                                   )}

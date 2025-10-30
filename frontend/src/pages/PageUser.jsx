@@ -287,7 +287,7 @@ const PageUser = () => {
                         <div className="flex absolute cursor-pointer bottom-0 rounded-full w-12 h-12 items-center justify-center right-0 gap-2 bg-black ">
                           <FaRegEdit
                             onClick={() => {
-                              setPreview(null); // ✅ reset preview ทุกครั้งก่อนเปิด modal
+                              setPreview(null); 
                               setFile(null);
                               setEditImage(true);
                             }}
@@ -321,7 +321,7 @@ const PageUser = () => {
                                         : imageUser
                                         ? `${
                                             import.meta.env.VITE_API
-                                          }/img_users/${email}.jpg`
+                                          }/img_users/${email}.jpg?${Date.now()}`
                                         : `${
                                             import.meta.env.VITE_API
                                           }/img_users/default.jpg`

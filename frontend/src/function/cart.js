@@ -21,11 +21,27 @@ export const updateCartQuantity = async(cartId,quantity)=>{
     return await axios.put(`${import.meta.env.VITE_API}/cart/${cartId}`,{ newQuantity: quantity })
 }
 
-export const removeCart = async(cartId)=>{
-    return await axios.delete(`${import.meta.env.VITE_API}/cart/${cartId}`)
-}
+
 
 export const confirmCart = async(customerEmail,address,paymentMethod)=>{
     return await axios.put(`${import.meta.env.VITE_API}/cart/confirm/${customerEmail}`,{address,          // ส่ง address object
     payment_method: paymentMethod})
 }
+
+//admin
+export const createCart = async(cartData)=>{
+    return await axios.post(`${import.meta.env.VITE_API}/cart/admin`,cartData)
+}
+
+export const getAllCart = async()=>{
+    return await axios.get(`${import.meta.env.VITE_API}/cart/admin`)
+}
+
+export const updateCart = async(cartId,cartData)=>{
+    return await axios.put(`${import.meta.env.VITE_API}/cart/admin/${cartId}`,cartData)
+}
+
+export const removeCart = async(cartId)=>{
+    return await axios.delete(`${import.meta.env.VITE_API}/cart/admin/${cartId}`)
+}
+//admin

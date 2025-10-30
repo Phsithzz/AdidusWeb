@@ -1,4 +1,5 @@
 import logo from "../assets/logo.jpg";
+import iconMobile from "../assets/iconMobile.png"
 import hero1 from "../assets/hero1.svg";
 import hero2 from "../assets/hero2.jpg";
 import hero3 from "../assets/hero3.jpg";
@@ -12,6 +13,8 @@ import cate4 from "../assets/cate4.png";
 import { IoMdSearch } from "react-icons/io";
 import { RiShoppingBag2Line } from "react-icons/ri";
 import { FaRegUserCircle } from "react-icons/fa";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -68,8 +71,6 @@ const brands = ["Adidas", "Nike", "NewBalance", "Puma"];
 const category = ["Sneaker", "Football", "Basketball", "FlipFlops"];
 
 const Navbar = () => {
-
-
   const [isMegaBrand, setMegaBrand] = useState(false);
   const [isMegaProduct, setMegaProduct] = useState(false);
 
@@ -84,6 +85,7 @@ const Navbar = () => {
   const [name, setName] = useState(null);
   const [login, setLogin] = useState(null);
 
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     if (!searchTerm) {
       // ถ้า searchTerm ว่าง ให้ล้างผลลัพธ์
@@ -108,7 +110,7 @@ const Navbar = () => {
 
     search();
   }, [searchTerm]);
-  
+
   useEffect(() => {
     const getUser = async () => {
       await users
@@ -123,21 +125,19 @@ const Navbar = () => {
     getUser();
   }, []);
 
- 
   const handleResultClick = async (productId) => {
     setSearchTerm("");
     setResult([]);
     navigate(`/products/${productId}`);
   };
-  
-  const handleUserClick = ()=>{
-    if(login && name){
-      navigate("/user/info")
+
+  const handleUserClick = () => {
+    if (login && name) {
+      navigate("/user/info");
+    } else {
+      navigate("/register");
     }
-    else{
-      navigate("/register")
-    }
-  }
+  };
 
   return (
     <>
@@ -148,7 +148,8 @@ const Navbar = () => {
               <img src={logo} alt="Logo" className=" h-10 cursor-pointer" />
             </Link>
           </div>
-          <div className="flex justify-between items-center gap-6 w-[65%]">
+
+          <div className="hidden md:flex justify-between items-center gap-6 w-[65%]">
             <div className="flex items-center gap-8">
               <Link
                 to="/"
@@ -224,7 +225,7 @@ const Navbar = () => {
             </div>
 
             <div className="flex ml-auto relative  gap-4 items-center">
-              <div className="relative ">
+              <div className="relative hidden md:flex items-center">
                 <div
                   className={`flex items-center border-2 p-2 border-white rounded-full origin-right transition-all duration-300 ease-in-out ${
                     isFocus ? "w-100 " : "w-40 sm:w-64"
@@ -298,7 +299,7 @@ const Navbar = () => {
               </div>
 
               <div className="flex items-center gap-4 flex-shrink-0">
-                <Link to="/cart" >
+                <Link to="/cart">
                   <RiShoppingBag2Line className="text-white font-semibold text-4xl cursor-pointer " />
                 </Link>
 
@@ -309,16 +310,64 @@ const Navbar = () => {
 
                   {name && login && (
                     <>
-                    <p className="text-white font-semibold truncate max-w-[120px] sm:max-w-[150px] ">{name}</p>
-                   
+                      <p className="text-white font-semibold truncate max-w-[120px] sm:max-w-[150px] ">
+                        {name}
+                      </p>
                     </>
                   )}
                 </div>
               </div>
             </div>
           </div>
+          <button
+            className="md:hidden text-white text-3xl"
+            onClick={() => setMenuOpen(true)}
+          >
+            <GiHamburgerMenu />
+          </button>
         </div>
       </div>
+ 
+      <div
+        className={`fixed top-0 right-0 h-full w-2/4 bg-white text-black z-[999] p-6 transform transition-transform duration-500 ease-in-out ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <img src={iconMobile} alt="Logo" className="h-20" />
+          <IoClose
+          size={40}
+            className=" cursor-pointer"
+            onClick={() => setMenuOpen(false)}
+          />
+        </div>
+
+        <nav className="flex flex-col gap-6 font-semibold text-lg">
+          <Link to="/" onClick={() => setMenuOpen(false)}>
+            หน้าแรก
+          </Link>
+          <Link to="/products" onClick={() => setMenuOpen(false)}>
+            สินค้า
+          </Link>
+          <Link to="/brands" onClick={() => setMenuOpen(false)}>
+            แบรนด์
+          </Link>
+          <Link to="/cart" onClick={() => setMenuOpen(false)}>
+            ตะกร้าของฉัน
+          </Link>
+          <Link to="/user/info" onClick={() => setMenuOpen(false)}>
+            ข้อมูลผู้ใช้
+          </Link>
+        </nav>
+      </div>
+
+      {/* Dim background when menu open */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 bg-opacity-50 z-[998]"
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
     </>
   );
 };

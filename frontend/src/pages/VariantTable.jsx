@@ -3,10 +3,12 @@ import { deleteVariant } from "../function/variant.js";
 
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
+import { useState } from "react";
 const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error}) => {
 
+  const [confirmVariant,setConfirmVariant] = useState(null)
 
-  //search
+
   const filteredData = tableData.filter(
     (v) =>
       v.product_id
@@ -19,8 +21,8 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
   );
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm("Are you sure");
-    if (confirm) {
+ 
+
       try {
         await deleteVariant(id);
         setTableData((prevData) =>
@@ -29,7 +31,7 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
       } catch (err) {
         console.log(err);
       }
-    }
+    
   };
   return (
     <>
@@ -97,7 +99,9 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
                         <FiEdit size={14} /> แก้ไข
                       </button>
                       <button
-                        onClick={()=>handleDelete(variant.variant_id)}
+                        onClick={() => {
+                          setConfirmVariant(variant);
+                        }}
                         className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded-md hover:bg-red-600 flex items-center gap-2 text-sm"
                       >
                         <RiDeleteBinLine size={14} /> ลบ
@@ -108,6 +112,39 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
               ))}
             </tbody>
           </table>
+            {confirmVariant &&(
+                <>
+                   <div className="fixed top-0 right-0 flex justify-center items-center bg-black/50 w-full h-full">
+      <div className="bg-white rounded-2xl p-6 w-[500px]">
+         <div className="flex flex-col justify-center space-y-4">
+        <h1 className="text-2xl text-center font-semibold ">
+          ยืนยันการลบข้อมูล?
+        </h1>
+         <p className="text-center text-md font-semibold">Product ID:{confirmVariant.product_id} {confirmVariant.size} {confirmVariant.color}</p>
+        <div className="flex gap-4">
+          <button
+          onClick={()=>setConfirmVariant(false)}
+            type="button"
+            className="cursor-pointer px-4 py-2 border-2 w-full hover:border-red-600  transition ease-in duration-200 text-black rounded-md  text-center bg-white  font-semibold"
+          >
+            ยกเลิก
+          </button>
+          <button
+          onClick={() => {
+  handleDelete(confirmVariant.user_id);
+  setConfirmVariant(null);
+}}
+            className="cursor-pointer border-2 px-4 py-2 text-white hover:bg-white w-full hover:text-black transition ease-in duration-200 rounded-md  text-center bg-black font-semibold"
+            type="button"
+          >
+            ลบข้อมูล
+          </button>
+        </div>
+      </div>
+        </div>
+        </div>
+                </>
+              )}
         </div>
       </div>
     </>

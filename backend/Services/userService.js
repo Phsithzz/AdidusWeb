@@ -72,7 +72,7 @@ export const updatePassword = async (email, currentPassword, newPassword) => {
 
 export const getAllUser = async()=>{
   const {rows} = await query(`
-    SELECT * FROM users
+    SELECT user_id,name,lastname,email,role FROM users
     `)
     return rows
 }
@@ -81,7 +81,7 @@ export const updateUser = async(userId,userData)=>{
   const { name, lastname,email,role} = userData
   const {rows} = await query(`
     UPDATE users SET name=$1,lastname=$2,email=$3,role=$4
-    WHERE user_id=$6
+    WHERE user_id=$5
     RETURNING*`,[name,lastname,email,role,userId])
   return rows[0]
 }

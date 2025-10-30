@@ -2,9 +2,8 @@ import { MdProductionQuantityLimits } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import { useState } from "react";
 
-import AddProductAdmin from "./AddProductAdmin";
 
-const NavbarAdmin = ({ onOpen, onSearch }) => {
+const NavbarAdmin = ({ onOpen, onSearch, showAddButton = true  }) => {
   const [isFocus, setFocus] = useState(false);
 
   const handleSearchChange = (e) => {
@@ -34,14 +33,16 @@ const NavbarAdmin = ({ onOpen, onSearch }) => {
           <IoMdSearch size={20} />
         </div>
 
-        <button
-          onClick={onOpen}
-          className="flex items-center gap-4 border bg-black px-4 py-2 hover:bg-white group hover:border rounded-md  text-center cursor-pointer transition ease-in duration-200"
-        >
-          <p className="text-lg font-semibold text-white group-hover:text-black ">
-            เพิ่มข้อมูล
-          </p>
-        </button>
+         {showAddButton && (
+    <button
+      onClick={onOpen}
+      className="flex items-center gap-4 border bg-black px-4 py-2 ..."
+    >
+      <p className="text-lg font-semibold text-white group-hover:text-black ">
+        เพิ่มข้อมูล
+      </p>
+    </button>
+  )}
       </div>
     </>
   );

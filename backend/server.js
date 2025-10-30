@@ -17,6 +17,14 @@ import productRoute from "./Routes/productRoute.js";
 import variantRoute from "./Routes/variantRoute.js";
 import userRoute from "./Routes/userRoute.js";
 import cartRoute from "./Routes/cartRoute.js"
+import orderRoute from "./Routes/orderRoute.js"
+
+//swagger Yaml
+import swaggerUI from "swagger-ui-express"
+import yaml from "yaml"
+//file
+import fs from "fs"
+
 //import
 
 //use ENV
@@ -46,7 +54,14 @@ app.use(productRoute);
 app.use(variantRoute);
 app.use(userRoute);
 app.use(cartRoute)
+app.use(orderRoute)
 //route
+
+//swager + yaml
+const swaggerfile = fs.readFileSync("services/swagger.yaml","utf-8")
+const swaggerDoc = yaml.parse(swaggerfile)
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDoc))
+
 
 //run port server
 const port = process.env.PORT || 3000;

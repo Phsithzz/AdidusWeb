@@ -119,7 +119,7 @@ const ConsoleAdmin = () => {
 
           <div className="flex items-center gap-4">
             <AiOutlineOrderedList size={30} color="white" />
-            <Link to="/admin/orders" className="text-md text-white font-medium cursor-pointer">
+            <Link to="/admin/order" className="text-md text-white font-medium cursor-pointer">
               Orders List
             </Link>
           </div>

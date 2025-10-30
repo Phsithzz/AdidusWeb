@@ -36,3 +36,15 @@ export const userEditInfo = async(email,userData)=>{
 export const updatePassword = async(email,currentPassword,newPassword)=>{
     return await axios.put(`${import.meta.env.VITE_API}/user/password/${email}`,{currentPassword,newPassword})
 }
+//admin
+export const getAllUser = async()=>{
+    return await axios.get(`${import.meta.env.VITE_API}/user`)
+}
+
+export const updateUser = async(userId,userData)=>{
+    return await axios.put(`${import.meta.env.VITE_API}/user/${userId}`,userData)
+}
+
+export const removeUser = async(userId)=>{
+    return await axios.delete(`${import.meta.env.VITE_API}/user/${userId}`)
+}

@@ -36,7 +36,7 @@ const NavbarAdmin = ({ onOpen, onSearch, showAddButton = true  }) => {
          {showAddButton && (
     <button
       onClick={onOpen}
-      className="flex items-center gap-4 border bg-black px-4 py-2 ..."
+      className="flex items-center gap-4 border rounded-lg bg-black px-4 py-2 ..."
     >
       <p className="text-lg font-semibold text-white group-hover:text-black ">
         เพิ่มข้อมูล

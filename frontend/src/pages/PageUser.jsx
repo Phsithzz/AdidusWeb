@@ -578,13 +578,13 @@ const PageUser = () => {
                                           className="border-2 border-[#919191] p-2 rounded-xs  pl-4"
                                         />
                                       </div>
-                                      {/* {editMessage && (
+                                      {editMessage && (
                                     <>
                                       <p className="text-md pl-2 font-medium  text-red-500">
                                         {editMessage}
                                       </p>
                                     </>
-                                  )} */}
+                                  )}
                                     </form>
                                     <div className="flex gap-4  justify-between">
                                       <button

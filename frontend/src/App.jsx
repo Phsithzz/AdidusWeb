@@ -18,6 +18,7 @@ import LayoutAdminVariant from "./layouts/LayoutAdminVariant";
 import LayoutAdminUser from "./layouts/LayoutAdminUser";
 import LayoutAdminCart from "./layouts/LayoutAdminCart";
 import LayoutAdminOrder from "./layouts/LayoutAdminOrder";
+import CartOrder from "./pages/CartOrder";
 const App = () => {
   return (
     <>
@@ -78,6 +79,7 @@ const App = () => {
           <Route path="user/info" element={<PageUser />} />
           <Route path="cart" element={<LayoutCart />} />
           <Route path="pay" element={<LayoutPay />} />
+          <Route path="order" element={<CartOrder/>}/>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

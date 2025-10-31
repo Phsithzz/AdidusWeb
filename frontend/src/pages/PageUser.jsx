@@ -301,7 +301,7 @@ const PageUser = () => {
                             <div className="relative bg-white w-[500px]  rounded-2xl  p-6">
                               <button
                                 onClick={() => {
-                                  setPreview(null); // ✅ reset ตอนปิด
+                                  setPreview(null); 
                                   setFile(null);
                                   setEditImage(false);
                                 }}

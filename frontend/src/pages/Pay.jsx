@@ -396,13 +396,7 @@ const Pay = () => {
                   ></span>
                 </button>
 
-                {/* <button
-                  onClick={() => setShowSuccess(true)}
-                  type="button"
-                  className="font-semibold text-md text-center text-white bg-black px-2 hover:bg-white hover:text-black border transition-all ease-in duration-200 py-4 rounded-full cursor-pointer"
-                >
-                  ยืนยันคำสั่งซื้อ
-                </button> */}
+              
               </div>
             </div>
           </div>

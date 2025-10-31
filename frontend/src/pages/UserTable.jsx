@@ -1,7 +1,9 @@
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { removeUser } from "../function/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUser } from "../function/user";
+import Swal from 'sweetalert2'
 const UserTable = ({
   tableData,
   setTableData,
@@ -9,9 +11,25 @@ const UserTable = ({
   handleOpen,
   searchTerm,
 }) => {
-  const [confirmUser, setConfirmUser] = useState(null);
+
+const [emailUser,setEmailUser] = useState(null) 
+const [confirmUser, setConfirmUser] = useState(null);
+  const getInfoUser = async()=>{
+     try {
+       const res = await getUser()
+      setEmailUser(res.data.email)
+     } catch (err) {
+      console.log(err)
+      
+     }
+  }
+  useEffect(()=>{
+    getInfoUser()
+  },[])
+  
 
   const filteredData = tableData.filter(
+
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.lastname.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -19,9 +37,23 @@ const UserTable = ({
       item.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,email) => {
+    if(emailUser === email){
+Swal.fire({
+  icon: "warning",
+  title: "ไม่สามารถดำเนินการได้",
+  text: "คุณไม่สามารถลบข้อมูลของตัวเองได้",
+  confirmButtonText: "ตกลง",
+  customClass: {
+    confirmButton: " cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border  hover:text-black hover:border-black transition duration-200"
+  },
+  buttonsStyling: false // ปิดสไตล์เริ่มต้นของ SweetAlert2 เพื่อใช้ Tailwind เอง
+})
+    return;
+    }
     await removeUser(id);
     setTableData((prev) => prev.filter((item) => item.user_id !== id));
+    
   };
   return (
     <>
@@ -114,7 +146,7 @@ const UserTable = ({
                       </button>
                       <button
                         onClick={() => {
-                          handleDelete(confirmUser.user_id);
+                          handleDelete(confirmUser.user_id,confirmUser.email);
                           setConfirmUser(null);
                         }}
                         className="cursor-pointer border-2 px-4 py-2 text-white hover:bg-white w-full hover:text-black transition ease-in duration-200 rounded-md  text-center bg-black font-semibold"

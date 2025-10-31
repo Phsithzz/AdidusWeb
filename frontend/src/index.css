@@ -1,7 +1,23 @@
 @import "tailwindcss";
 
-
-
 *{
     font-family:'Jost';
+}
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  25% {
+    left: 125%;
+  }
+  75%{
+    right:-75%
+  }
+  100%{
+    right:125%
+  }
+}
+
+@theme {
+  --animate-shine: shine 4s infinite linear;
 }

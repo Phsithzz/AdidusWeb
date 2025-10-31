@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar"
 import ProductDetail from "../pages/ProductDetail"
 import SlideProduct from "../components/SlideProduct"
+import Footer from "../components/Footer"
 const LayoutProductDetail = () => {
 
   return (
@@ -9,6 +10,7 @@ const LayoutProductDetail = () => {
         <Navbar/>
         <ProductDetail />
         <SlideProduct/>
+        <Footer/>
     </div>
     </>
   )

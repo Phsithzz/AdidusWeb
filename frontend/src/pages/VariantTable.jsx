@@ -1,6 +1,5 @@
 
 import { deleteVariant } from "../function/variant.js";
-
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { useState } from "react";
@@ -9,16 +8,16 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
   const [confirmVariant,setConfirmVariant] = useState(null)
 
 
-  const filteredData = tableData.filter(
-    (v) =>
-      v.product_id
-        .toString()
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      v.price.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (v.size && v.size.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (v.color && v.color.toLowerCase().includes(searchTerm.toLowerCase()))
+const filteredData = tableData.filter((v) => {
+  const search = searchTerm.toLowerCase();
+
+  return (
+    v.product_id?.toString().toLowerCase().includes(search) ||
+    v.price?.toString().toLowerCase().includes(search) ||
+    v.size?.toString().toLowerCase().includes(search) ||
+    v.color?.toString().toLowerCase().includes(search)
   );
+});
 
   const handleDelete = async (id) => {
  
@@ -131,7 +130,7 @@ const VariantTable = ({ handleOpen, searchTerm, tableData, setTableData ,error})
           </button>
           <button
           onClick={() => {
-  handleDelete(confirmVariant.user_id);
+  handleDelete(confirmVariant.variant_id);
   setConfirmVariant(null);
 }}
             className="cursor-pointer border-2 px-4 py-2 text-white hover:bg-white w-full hover:text-black transition ease-in duration-200 rounded-md  text-center bg-black font-semibold"

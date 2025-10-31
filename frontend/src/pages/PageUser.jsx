@@ -11,6 +11,7 @@ import { RxCross2 } from "react-icons/rx";
 import { RiBillLine } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import CartOrder from "./CartOrder.jsx";
+import Footer from "../components/Footer.jsx";
 const PageUser = () => {
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
@@ -124,7 +125,6 @@ const PageUser = () => {
     try {
       await users.updatePassword(email, currentPassword, newPassword);
       setEditPassword(false);
-      // เคลียร์ input
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -639,6 +639,7 @@ const PageUser = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

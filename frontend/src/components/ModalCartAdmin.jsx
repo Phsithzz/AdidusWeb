@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Swal from 'sweetalert2'
 const ModalCartAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const [customerEmail, setCustomerEmail] = useState("");
   const [variantId, setVariantId] = useState("");
@@ -16,7 +16,17 @@ const ModalCartAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
       !price ||
       (mode === "edit" && status === "")
     ) {
-      alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+     Swal.fire({
+    icon: "warning",
+    title: "ข้อมูลไม่ครบ!",
+    text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+    confirmButtonText: "ตกลง",
+    buttonsStyling: false,
+    customClass: {
+      confirmButton:
+        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border  hover:text-black hover:border-black transition duration-200",
+    },
+  });
       return;
     }
 

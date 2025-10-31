@@ -138,14 +138,14 @@ const Navbar = () => {
       navigate("/register");
     }
   };
-
+console.log(user)
   return (
     <>
       <div className=" bg-black">
         <div className="flex   items-center justify-between p-6">
           <div className="w-[35%]">
             <Link to="/">
-              <img src={logo} alt="Logo" className=" h-10 cursor-pointer" />
+              <img src={logo} alt="Logo" className=" w-15 h-15 cursor-pointer" />
             </Link>
           </div>
 

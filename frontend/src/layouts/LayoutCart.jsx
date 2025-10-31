@@ -2,6 +2,7 @@
 import Cart from '../pages/Cart'
 import Navbar from '../components/Navbar'
 import SlideProduct from '../components/SlideProduct'
+import Footer from '../components/Footer'
 const LayoutCart = () => {
   
   return (
@@ -11,6 +12,7 @@ const LayoutCart = () => {
         <Navbar/>
         <Cart />
         <SlideProduct />
+        <Footer/>
     </div>
     </>
   )

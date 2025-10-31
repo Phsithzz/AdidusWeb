@@ -1,55 +1,38 @@
-import React from "react";
 import { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
-import ConfirmDelete from "../components/ConfirmDelete.jsx";
-import EditProduct from "../components/EditProduct.jsx";
+import { deleteProduct } from "../function/product.js";
+import AdminProductDetail from "../components/AdminProductDetail.jsx";
+const ProductTable = ({
+  handleOpen,
+  searchTerm,
+  tableData,
+  setTableData,
+  error,
+}) => {
+  const [confirmProduct, setConfirmProduct] = useState(null);
+  const [modalDetail, setModalDetail] = useState(false);
+  const [messageDetail, setMessageDetail] = useState(null);
 
-const ProductTable = ({ searchTerm, products, setProducts }) => {
-  const [showEdit, setShowEdit] = useState(false);
+  const filteredData = tableData.filter(
+    (p) =>
+      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.brand.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const [confirm, setConfirm] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const displayProducts = Array.isArray(products)
-    ? products.filter((product) => {
-        if (!product) {
-          return false;
-        }
-
-        const term = searchTerm.toLowerCase();
-
-        const nameMatch =
-          product.name && product.name.toLowerCase().includes(term);
-        const descMatch =
-          product.description &&
-          product.description.toLowerCase().includes(term);
-        const brandMatch =
-          product.brand && product.brand.toLowerCase().includes(term);
-        const categoryMatch =
-          product.category_name &&
-          product.category_name.toLowerCase().includes(term);
-
-        return nameMatch || descMatch || brandMatch || categoryMatch;
-      })
-    : [];
-
-  const handleSaveProduct = (updatedProduct) => {
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.product_id === updatedProduct.product_id ? updatedProduct : p
-      )
-    );
-    setShowEdit(false);
-  };
-
-  const handleDeleteProduct = (id) => {
-    setProducts((prev) => prev.filter((p) => p.product_id !== id));
-    setConfirm(false);
+  const handleDelete = async (id) => {
+    try {
+      await deleteProduct(id);
+      setTableData((prevData) => prevData.filter((p) => p.product_id !== id));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
+      {error && <div className="text-red-500">{error}</div>}
       <div className="overflow-x-auto p-4">
         <div className="shadow-sm overflow-hidden rounded-lg border border-gray-200">
           <table className="w-full min-w-[1000px] border-collapse border border-gray-300]">
@@ -91,7 +74,7 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-300">
-              {displayProducts.map((product) => (
+              {filteredData.map((product) => (
                 <tr key={product.product_id} className="hover:bg-gray-50 ">
                   <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-900 font-medium">
                     {product.product_id}
@@ -105,7 +88,7 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
                   <td className="px-4 py-4 text-center text-sm text-gray-700">
                     {product.description}
                   </td>
-                  <td className="px-4 py-4 text-centerwhitespace-nowrap text-sm text-gray-700 text-centert">
+                  <td className="px-4 py-4 text-center whitespace-nowrap text-sm text-gray-700 text-centert">
                     {product.price}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-center">
@@ -129,7 +112,10 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
                   {/* ทำให้เป็นปุ่มตามคอมเมนต์ */}
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
                     <button
-                      onClick={() => alert(product.detail)} // เปลี่ยน alert เป็น modal ของคุณ
+                      onClick={() => {
+                        setMessageDetail(product.detail);
+                        setModalDetail(true);
+                      }}
                       className="text-blue-600 hover:text-blue-800 text-xs py-1 px-2 rounded border border-blue-200 hover:bg-blue-50"
                     >
                       ดูรายละเอียด
@@ -140,8 +126,7 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
                     <div className="flex justify-center items-center gap-2">
                       <button
                         onClick={() => {
-                          setSelectedProduct(product);
-                          setShowEdit(true);
+                          handleOpen("edit", product);
                         }}
                         className="bg-gray-800 cursor-pointer text-white px-3 py-1.5 rounded-md hover:bg-gray-700 flex items-center gap-1.5 text-sm"
                       >
@@ -149,8 +134,7 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
                       </button>
                       <button
                         onClick={() => {
-                          setSelectedProduct(product);
-                          setConfirm(true);
+                          setConfirmProduct(product);
                         }}
                         className="bg-red-500 cursor-pointer text-white px-3 py-1.5 rounded-md hover:bg-red-600 flex items-center gap-1.5 text-sm"
                       >
@@ -162,36 +146,69 @@ const ProductTable = ({ searchTerm, products, setProducts }) => {
               ))}
             </tbody>
           </table>
+          {modalDetail && (
+            <>
+              <div
+                onClick={() => setModalDetail(false)}
+                className="fixed z-50 top-0 right-0 flex justify-center items-center w-full h-full bg-black/50"
+              >
+                <div
+                  className="bg-white rounded-2xl p-6 w-[500px] cursor-default"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AdminProductDetail
+                    onCancel={() => setModalDetail(false)}
+                    messageDetail={messageDetail}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          {confirmProduct && (
+            <>
+              <div
+                onClick={() => setConfirmProduct(false)}
+                className="fixed z-50 top-0 right-0 flex justify-center items-center bg-black/50 w-full h-full"
+              >
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white rounded-2xl p-6 w-[500px]
+              "
+                >
+                  <div className="flex flex-col justify-center space-y-4">
+                    <h1 className="text-2xl text-center font-semibold ">
+                      ยืนยันการลบข้อมูล?
+                    </h1>
+                    <p className="text-center text-md font-semibold">
+                      Product ID:{confirmProduct.product_id}{" "}
+                      {confirmProduct.name}
+                    </p>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => setConfirmProduct(false)}
+                        type="button"
+                        className="cursor-pointer px-4 py-2 border-2 w-full hover:border-red-600  transition ease-in duration-200 text-black rounded-md  text-center bg-white  font-semibold"
+                      >
+                        ยกเลิก
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleDelete(confirmProduct.product_id);
+                          setConfirmProduct(null);
+                        }}
+                        className="cursor-pointer border-2 px-4 py-2 text-white hover:bg-white w-full hover:text-black transition ease-in duration-200 rounded-md  text-center bg-black font-semibold"
+                        type="button"
+                      >
+                        ลบข้อมูล
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
-
-      {/* Modals (ส่วนนี้ดีอยู่แล้ว) */}
-      {showEdit && (
-        <>
-          <div className="fixed top-0 right-0 flex justify-center items-center bg-black/50 w-full h-full z-50">
-            <div className="bg-white rounded-2xl p-6 w-[800px]">
-              <EditProduct
-                product={selectedProduct}
-                onSave={handleSaveProduct}
-                onCancel={() => setShowEdit(false)}
-              />
-            </div>
-          </div>
-        </>
-      )}
-      {confirm && (
-        <>
-          <div className="fixed top-0 right-0 flex justify-center  items-center w-full h-full bg-black/50  z-50">
-            <div className=" bg-white w-[500px]  rounded-2xl  p-6">
-              <ConfirmDelete
-                product={selectedProduct}
-                onDelete={handleDeleteProduct}
-                onCancel={() => setConfirm(false)}
-              />
-            </div>
-          </div>
-        </>
-      )}
     </>
   );
 };

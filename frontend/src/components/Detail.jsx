@@ -45,7 +45,7 @@
               </div>
               <div className="flex flex-col mt-6 space-y-2">
               <h1 className="text-md font-semibold">รายละเอียดสินค้า</h1>
-              <p className="text-md font-semibold">{product.detail} </p>
+              <p className="text-md font-medium">{product.detail} </p>
             </div>
               <div className="absolute top-0 right-0">
                 <button type="button" onClick={onCancel}>

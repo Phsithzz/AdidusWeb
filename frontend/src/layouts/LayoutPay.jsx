@@ -1,4 +1,5 @@
 
+import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
 import Pay from '../pages/Pay'
 const LayoutPay = () => {
@@ -6,6 +7,7 @@ const LayoutPay = () => {
     <>
         <Navbar/>
         <Pay/>
+        <Footer/>
     </>
   )
 }

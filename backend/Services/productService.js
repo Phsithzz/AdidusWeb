@@ -12,10 +12,11 @@ export const createProduct = async (productData) => {
     image_filename,
     brand,
     category_name,
+    detail
   } = productData;
 
   const { rows } = await query(
-    "INSERT INTO products(name,description,price,stock_quantity,image_filename,brand,category_name) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING*",
+    "INSERT INTO products(name,description,price,stock_quantity,image_filename,brand,category_name,detail) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING*",
     [
       name,
       description,
@@ -24,6 +25,7 @@ export const createProduct = async (productData) => {
       image_filename,
       brand,
       category_name,
+      detail
     ]
   );
 

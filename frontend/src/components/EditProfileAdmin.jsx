@@ -50,7 +50,7 @@ const EditProfileAdmin = ({
       onCancel();
     } catch (err) {
       console.log(err);
-      alert("Update failed");
+      onCancel()  
     }
   };
 

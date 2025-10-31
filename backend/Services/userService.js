@@ -24,7 +24,7 @@ export const register = async (userData) => {
 //ใช้แสดงข้อมูลทั้งหมดของuser แต่ละคน
 export const getOneUser = async(email)=>{
   const {rows} = await query(`
-    SELECT * FROM users WHERE email=$1
+    SELECT name,lastname,email FROM users WHERE email=$1
     `,[email])
   return rows[0]
 }

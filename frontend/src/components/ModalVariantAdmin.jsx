@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Swal from 'sweetalert2'
 const ModalVariantAdmin = ({
 
   onClose,
@@ -15,6 +15,20 @@ const ModalVariantAdmin = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!productId || !stockQuantity || !price || !size || !color) {
+Swal.fire({
+    icon: "warning",
+    title: "ข้อมูลไม่ครบ!",
+    text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+    confirmButtonText: "ตกลง",
+    buttonsStyling: false,
+    customClass: {
+      confirmButton:
+        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+    },
+  });
+    return;
+  }
     try {
       const variantData = {
         product_id: parseInt(productId),

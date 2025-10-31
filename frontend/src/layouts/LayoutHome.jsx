@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as user from "../function/user.js";
-
+import Footer from "../components/Footer.jsx";
 const LayoutHome = () => {
    const navigate = useNavigate();
 
@@ -31,6 +31,7 @@ const LayoutHome = () => {
   }, [navigate]);
   return (
     <>
+    
       <div className="flex flex-col">
         <Navbar />
       </div>
@@ -43,7 +44,13 @@ const LayoutHome = () => {
           <div className="mt-6">
             <Outlet />
           </div>
+   
         </div>
+         
+      </div>
+      <div className="mt-8">
+      <Footer />
+
       </div>
     </>
   );

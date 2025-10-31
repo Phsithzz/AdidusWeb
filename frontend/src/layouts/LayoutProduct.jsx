@@ -2,6 +2,7 @@ import React from "react";
 import Hero from "../components/Hero";
 import Product from "../components/Product";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 const LayoutProduct = () => {
   return (
     <>
@@ -14,6 +15,7 @@ const LayoutProduct = () => {
           <Product />
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

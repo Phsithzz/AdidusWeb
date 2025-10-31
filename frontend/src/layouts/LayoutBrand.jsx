@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import AllProductBrand from "../components/AllProductBrand";
+import Footer from "../components/Footer";
 const LayoutBrand = () => {
   return (
     <>
@@ -14,6 +15,7 @@ const LayoutBrand = () => {
           <AllProductBrand />
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

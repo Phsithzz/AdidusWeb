@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Swal from 'sweetalert2'
 const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const [name, setName] = useState("");
   const [lastname, setLastName] = useState("");
@@ -11,17 +11,37 @@ const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
      if (name.trim() === "" || lastname.trim() === "" || email.trim() === "") {
-    alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+ Swal.fire({
+      icon: "warning",
+      title: "ข้อมูลไม่ครบ!",
+      text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+      confirmButtonText: "ตกลง",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+      },
+    });
     return;
   }
 
 
   if (mode === "add" && password.trim() === "") {
-    alert("กรุณากรอกรหัสผ่าน");
+   Swal.fire({
+    icon: "warning",
+    title: "ยังไม่ได้กรอกรหัสผ่าน!",
+    text: "กรุณากรอกรหัสผ่านก่อนดำเนินการต่อ",
+    confirmButtonText: "ตกลง",
+    buttonsStyling: false,
+    customClass: {
+      confirmButton:
+        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+    },
+  });
     return;
   }
     try {
-      // ข้อมูลที่ส่งไปตอน submit
+  
       const userData =
         mode === "add"
           ? { name, lastname, email, password } 

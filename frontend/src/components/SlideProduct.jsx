@@ -11,7 +11,7 @@ const SlideProduct = () => {
         const res = await getProduct();
         setShowProduct(RandomProduct(res.data));
 
-          window.scrollTo({top:0,behavior:"smooth"});
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
         console.log(err);
       }
@@ -41,14 +41,14 @@ const SlideProduct = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2, // หน้าจอใหญ่แต่ไม่เต็ม
+          slidesToShow: 2,
           slidesToScroll: 2,
         },
       },
       {
         breakpoint: 640,
         settings: {
-          slidesToShow: 1, // หน้าจอมือถือ
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -62,48 +62,47 @@ const SlideProduct = () => {
           <Slider {...settings} className="w-full   px-14">
             {showProduct.map((show) => (
               <Link to={`/products/${show.product_id}`}>
-              
-              <div
-                className="flex flex-col  border border-white hover:border-black transition-all ease-in space-y-2 p-4 cursor-pointer"
-                key={show.product_id}
-              >
-                <div className="flex justify-center items-center">
-                  <img
-                    src={`${import.meta.env.VITE_API}/img_products/${
-                      show.image_filename
-                    }.jpg`}
-                    alt={show.name}
-                    className="w-full h-full object-cover cursor-pointer"
-                  />
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <p className="text-xl font-semibold">{show.brand}</p>
-                  <p className="text-xl font-semibold">{show.name}</p>
-                  <p className="text-md font-semibold">{show.description}</p>
+                <div
+                  className="flex flex-col  border border-white hover:border-black transition-all ease-in space-y-2 p-4 cursor-pointer"
+                  key={show.product_id}
+                >
+                  <div className="flex justify-center items-center">
+                    <img
+                      src={`${import.meta.env.VITE_API}/img_products/${
+                        show.image_filename
+                      }.jpg`}
+                      alt={show.name}
+                      className="w-full h-full object-cover cursor-pointer"
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-xl font-semibold">{show.brand}</p>
+                    <p className="text-xl font-semibold">{show.name}</p>
+                    <p className="text-md font-semibold">{show.description}</p>
 
-                  <div className="flex flex-wrap items-center justify-between">
-                    <p className="text-md tracking-wide font-semibold">
-                      {new Intl.NumberFormat("th-TH", {
-                        style: "currency",
-                        currency: "THB",
-                        minimumFractionDigits: 0,
-                      }).format(show.price)}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-4">
-                      <Link to={`/products/${show.product_id}`}>
-                        <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
-                          <span>View Detail</span>
-                          <LuMousePointerClick className="text-xl" />
-                        </button>
-                      </Link>
-                      {/* <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
+                    <div className="flex flex-wrap items-center justify-between">
+                      <p className="text-md tracking-wide font-semibold">
+                        {new Intl.NumberFormat("th-TH", {
+                          style: "currency",
+                          currency: "THB",
+                          minimumFractionDigits: 0,
+                        }).format(show.price)}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-4">
+                        <Link to={`/products/${show.product_id}`}>
+                          <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
+                            <span>View Detail</span>
+                            <LuMousePointerClick className="text-xl" />
+                          </button>
+                        </Link>
+                        {/* <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
                           <BsCartPlus className="text-xl" />
                           <span>Add to Cart</span>
                         </button> */}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </Link>
             ))}
           </Slider>

@@ -2,23 +2,21 @@ import { useEffect, useState } from "react";
 import * as productAPI from "../function/product.js";
 import { Link } from "react-router-dom";
 import { LuMousePointerClick } from "react-icons/lu";
-import { BsCartPlus } from "react-icons/bs";
 
 const AllProductBrand = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await productAPI.getProduct(); // ดึงสินค้าทั้งหมด
+      const res = await productAPI.getProduct(); 
       setProducts(res.data);
     };
     loadData();
   }, []);
 
-  // กำหนดลำดับแบรนด์
   const brandOrder = ["Adidas", "Nike", "Puma", "Newbalance"];
 
-  // จัดกลุ่มสินค้าตามแบรนด์
+
   const productsByBrand = brandOrder.map((brand) => ({
     brand,
     items: products.filter((p) => p.brand === brand),

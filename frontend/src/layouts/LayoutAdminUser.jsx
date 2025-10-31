@@ -35,7 +35,7 @@ const LayoutAdminUser = () => {
     if (modalMode === "add") {
       try {
         const res = await user.register(newData);
-     
+
         setTableData((prev) => [...prev, res.data.users]);
       } catch (err) {
         console.log(err);

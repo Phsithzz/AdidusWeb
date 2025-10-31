@@ -64,44 +64,54 @@ const CartOrder = ({ email }) => {
                       <p className="text-md font-medium">x{item.quantity} </p>
                     </div>
                   </div>
-                      <div className="flex space-y-18 flex-col">
-    <p className="text-md tracking-wide text-end font-semibold">
-                    {new Intl.NumberFormat("th-TH", {
-                      style: "currency",
-                      currency: "THB",
-                      minimumFractionDigits: 0,
-                    }).format(item.price)}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-<p className="text-md text-end font-semibold">ช่องทางการชำระเงิน:</p>
-<p className="text-md  text-end font-semibold">{item.payment_method}</p>
+                  <div className="flex space-y-18 flex-col">
+                    <p className="text-md tracking-wide text-end font-semibold">
+                      {new Intl.NumberFormat("th-TH", {
+                        style: "currency",
+                        currency: "THB",
+                        minimumFractionDigits: 0,
+                      }).format(item.price)}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <p className="text-md text-end font-semibold">
+                        ช่องทางการชำระเงิน:
+                      </p>
+                      <p className="text-md  text-end font-semibold">
+                        {item.payment_method}
+                      </p>
+                    </div>
                   </div>
-                      </div>
-               
-        
-              
                 </div>
-                   <div className="bg-white   border-b-2 pb-4 border-gray-300 mt-2 p-4">
-                    <div className="flex flex-col space-y-2">
+                <div className="bg-white   border-b-2 pb-4 border-gray-300 mt-2 p-4">
+                  <div className="flex flex-col space-y-2">
                     <p className="text-sm font-semibold">ที่อยู่ในการจัดส่ง</p>
                     <div className="flex gap-4">
-
-                    <p className="font-medium text-sm flex gap-2"><span className="font-semibold">บ้านเลขที่:</span>{item.house_number}</p>
-                    <p className="font-medium text-sm flex gap-2"><span className="font-semibold">บ้านเลขที่:</span>{item.village_number}</p>
-                    <p className="font-medium text-sm flex gap-2"><span className="font-semibold">บ้านเลขที่:</span>{item.subdistrict}</p>
-                    <p className="font-medium text-sm flex gap-2"><span className="font-semibold">บ้านเลขที่:</span>{item.province}</p>
-                    <p className="font-medium text-sm flex gap-2"><span className="font-semibold">บ้านเลขที่:</span>{item.postal_code}</p>
-
-                    </div>
-           
-
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">บ้านเลขที่:</span>
+                        {item.house_number}
+                      </p>
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">บ้านเลขที่:</span>
+                        {item.village_number}
+                      </p>
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">บ้านเลขที่:</span>
+                        {item.subdistrict}
+                      </p>
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">บ้านเลขที่:</span>
+                        {item.province}
+                      </p>
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">บ้านเลขที่:</span>
+                        {item.postal_code}
+                      </p>
                     </div>
                   </div>
-               
+                </div>
 
-                   <Link to={`/products/${item.product_id}`}
-            
-               
+                <Link
+                  to={`/products/${item.product_id}`}
                   className="cursor-pointer text-center relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
              border border-black bg-black transition-colors duration-500 group"
                 >
@@ -113,7 +123,6 @@ const CartOrder = ({ email }) => {
                group-hover:left-[125%]"
                   ></span>
                 </Link>
-         
               </div>
             </div>
           </div>

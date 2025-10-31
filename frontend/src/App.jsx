@@ -1,4 +1,4 @@
-import React from "react";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LayoutHome from "./layouts/LayoutHome";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -23,7 +23,6 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-
           <Route path="/" element={<LayoutHome />}>
             <Route index element={<HomeProduct />} />
 
@@ -63,23 +62,22 @@ const App = () => {
           </Route>
 
           {/* Admin  */}
-          <Route path="admin/products" element={<LayoutAdminProduct/>}/>
-          <Route path="admin/variant" element={<LayoutAdminVariant/>}/>
-          <Route path="admin/users" element={<LayoutAdminUser/>}/>
-          <Route path="admin/cart" element={<LayoutAdminCart/>}/>
-          <Route path="admin/order" element={<LayoutAdminOrder/>}/>
-           {/* Admin  */}
-     
-          
+          <Route path="admin/products" element={<LayoutAdminProduct />} />
+          <Route path="admin/variant" element={<LayoutAdminVariant />} />
+          <Route path="admin/users" element={<LayoutAdminUser />} />
+          <Route path="admin/cart" element={<LayoutAdminCart />} />
+          <Route path="admin/order" element={<LayoutAdminOrder />} />
+          {/* Admin  */}
+
           <Route path="products" element={<LayoutProduct />} />
           <Route path="brands" element={<LayoutBrand />} />
           <Route path="products/:id" element={<LayoutProductDetail />} />
 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="user/info" element={<PageUser/>}/>
-          <Route path="cart" element={<LayoutCart/>}/>
-          <Route path="pay" element={<LayoutPay/>}/>
+          <Route path="user/info" element={<PageUser />} />
+          <Route path="cart" element={<LayoutCart />} />
+          <Route path="pay" element={<LayoutPay />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

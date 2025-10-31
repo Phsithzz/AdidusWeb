@@ -24,7 +24,7 @@ export const updateCartQuantity = async(cartId,quantity)=>{
 
 
 export const confirmCart = async(customerEmail,address,paymentMethod)=>{
-    return await axios.put(`${import.meta.env.VITE_API}/cart/confirm/${customerEmail}`,{address,          // ส่ง address object
+    return await axios.put(`${import.meta.env.VITE_API}/cart/confirm/${customerEmail}`,{address,        
     payment_method: paymentMethod})
 }
 

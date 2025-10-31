@@ -1,5 +1,5 @@
 import { deleteProduct } from "../function/product";
-
+import Swal from "sweetalert2";
 const ConfirmDelete = ({ product,onCancel,onDelete }) => {
     const handleDelete = async()=>{
         try {
@@ -8,7 +8,17 @@ const ConfirmDelete = ({ product,onCancel,onDelete }) => {
             onCancel()
         } catch (err) {
             console.log(err)
-            alert("ลบสินค้าไม่สำเร็จ");
+           Swal.fire({
+      icon: "error",
+      title: "ลบสินค้าไม่สำเร็จ",
+      text: "เกิดข้อผิดพลาดในการลบสินค้า โปรดลองอีกครั้ง",
+      confirmButtonText: "ตกลง",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+      },
+    });
         }
     }
   return (

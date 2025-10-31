@@ -80,7 +80,6 @@ const LayoutAdminVariant = () => {
               <div className="fixed top-0 right-0 z-50 bg-black/50 flex justify-center items-center w-full h-full">
                 <div className="bg-white rounded-2xl p-6 w-[500px]">
                   <ModalVariantAdmin
-           
                     onSubmit={handleSubmit}
                     onClose={() => setIsOpen(false)}
                     mode={modalMode}

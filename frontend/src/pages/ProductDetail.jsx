@@ -11,6 +11,7 @@ import * as cart from "../function/cart.js";
 import { RxCross2 } from "react-icons/rx";
 import { FaCheckCircle } from "react-icons/fa";
 import SizeShoe from "../components/SizeShoe.jsx";
+import Swal from "sweetalert2";
 const shipping = [
   {
     id: 1,
@@ -54,14 +55,12 @@ const ProductDetail = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-
         const resId = await products.getProductId(id);
         console.log("ข้อมูลสินค้าที่ได้รับ:", resId.data);
         setProduct(resId.data);
 
         window.scrollTo(0, 0);
       } catch (error) {
-        // 👈 เพิ่ม catch
         console.error("โหลดข้อมูลสินค้าไม่สำเร็จ:", error);
       }
     };
@@ -100,7 +99,7 @@ const ProductDetail = () => {
 
     if (!selectedVariant) {
       setMessage("กรุณาเลือกไซส์ก่อนเพิ่มสินค้าลงตะกร้า");
-      return; // หยุดการทำงาน
+      return;
     }
 
     try {
@@ -128,14 +127,34 @@ const ProductDetail = () => {
         setShowCart(true);
         const res = await cart.getCart(userEmail);
         setCarts(res.data);
-        // หรือจะใช้ State แสดงผลสวยๆ
+
         console.log("Add to cart response:", cartRes.data.messageAddCart);
       } else {
-        alert(cartRes.data.messageAddCart || "เกิดข้อผิดพลาดในการเพิ่มสินค้า");
+        Swal.fire({
+          icon: "warning",
+          title: "ไม่สามารถเพิ่มสินค้าได้",
+          text: cartRes.data.messageAddCart || "เกิดข้อผิดพลาดในการเพิ่มสินค้า",
+          confirmButtonText: "ตกลง",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton:
+              "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+          },
+        });
       }
     } catch (err) {
       console.error("Error adding to cart:", err);
-      alert("เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้ง");
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด!",
+        text: "เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้ง",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+        },
+      });
     }
   };
 

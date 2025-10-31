@@ -1,41 +1,33 @@
 import React, { useEffect, useState } from "react";
-import Swal from 'sweetalert2'
-const ModalVariantAdmin = ({
-
-  onClose,
-  mode,
-  onSubmit,
-  variantData,
-}) => {
+import Swal from "sweetalert2";
+const ModalVariantAdmin = ({ onClose, mode, onSubmit, variantData }) => {
   const [productId, setProductId] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!productId || !stockQuantity || !price || !size || !color) {
-Swal.fire({
-    icon: "warning",
-    title: "ข้อมูลไม่ครบ!",
-    text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
-    confirmButtonText: "ตกลง",
-    buttonsStyling: false,
-    customClass: {
-      confirmButton:
-        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-    },
-  });
-    return;
-  }
+    if (!productId || !stockQuantity || !price || !size) {
+      Swal.fire({
+        icon: "warning",
+        title: "ข้อมูลไม่ครบ!",
+        text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+        },
+      });
+      return;
+    }
     try {
       const variantData = {
         product_id: parseInt(productId),
         stock_quantity: parseInt(stockQuantity),
         price: Number(price),
         size: Number(size),
-        color: color,
       };
 
       await onSubmit(variantData);
@@ -52,13 +44,11 @@ Swal.fire({
       setStockQuantity(variantData.stock_quantity);
       setPrice(variantData.price);
       setSize(variantData.size);
-      setColor(variantData.color);
     } else {
       setProductId("");
       setStockQuantity("");
       setPrice("");
       setSize("");
-      setColor("");
     }
   }, [mode, variantData]);
   return (
@@ -114,16 +104,6 @@ Swal.fire({
             />
           </div>
 
-          <div className="flex flex-col space-2">
-            <label htmlFor="color">สี</label>
-            <input
-              type="text"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="border border-gray-300 px-2 py-2 rounded-md"
-              id="color"
-            />
-          </div>
           <div className="flex gap-4">
             <button
               onClick={onClose}

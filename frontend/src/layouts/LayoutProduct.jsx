@@ -15,7 +15,7 @@ const LayoutProduct = () => {
           <Product />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

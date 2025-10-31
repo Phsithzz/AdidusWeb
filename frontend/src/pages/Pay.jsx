@@ -32,7 +32,6 @@ const Pay = () => {
 
   const [activeTab, setActiveTab] = useState("address");
 
-
   const [selectedPay, setSelectedPay] = useState(null);
 
   const [address, setAddress] = useState({
@@ -408,7 +407,6 @@ const Pay = () => {
             </div>
           </div>
         </div>
-     
       </div>
     </>
   );

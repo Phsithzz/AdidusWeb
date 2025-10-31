@@ -20,7 +20,7 @@ const ConsoleAdmin = () => {
   const [lastname, setLastname] = useState(null);
   const [imageUser, setImageUser] = useState(null);
 
-  //popUp
+
   const [editAdmin,setEditAdmin] = useState(false)
   const [showLogout, setShowLogout] = useState(false);
   const navigate = useNavigate();
@@ -144,9 +144,7 @@ const ConsoleAdmin = () => {
 
               <EditProfileAdmin 
               name={name} 
-              setName={setName}
               lastname={lastname}
-              setLastname={setLastname}
               email={email}
               image={imageUser}
               checkImage={checkImage  }

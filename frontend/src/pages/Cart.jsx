@@ -12,7 +12,6 @@ const Cart = () => {
   const navigate = useNavigate();
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
- 
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -81,10 +80,10 @@ const Cart = () => {
     return total + item.quantity * item.price;
   }, 0);
 
-  const checkLengthCart = ()=>{
-    if(carts.length == 0 ){
-       Swal.fire({
-              html: `
+  const checkLengthCart = () => {
+    if (carts.length == 0) {
+      Swal.fire({
+        html: `
             <div class="flex flex-col items-center space-y-4">
               <p class="text-center text-md font-semibold">ไม่มีสินค้าในตะกร้า!</p>
               <button id="go" class="cursor-pointer relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
@@ -96,26 +95,25 @@ const Cart = () => {
               </button>
             </div>
           `,
-              icon: "error",
-              showConfirmButton: false,
-              background: "white",
-              width: 500,
-              padding: "2rem",
-              didOpen: () => {
-                const btn = document.getElementById("go"); // bind ให้ตรงปุ่มจริง
-                if (btn) {
-                  btn.addEventListener("click", () => {
-                    Swal.close(); // ปิด popup
-                  });
-                }
-              },
+        icon: "error",
+        showConfirmButton: false,
+        background: "white",
+        width: 500,
+        padding: "2rem",
+        didOpen: () => {
+          const btn = document.getElementById("go");
+          if (btn) {
+            btn.addEventListener("click", () => {
+              Swal.close();
             });
-      return
+          }
+        },
+      });
+      return;
+    } else {
+      navigate("/pay");
     }
-    else{
-      navigate('/pay')
-    }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -237,8 +235,6 @@ const Cart = () => {
                       </div>
                     </>
                   ))}
-
-      
                 </div>
 
                 <div className="flex justify-between border-b-2 border-gray-300">
@@ -251,24 +247,20 @@ const Cart = () => {
                     }).format(totalPrice)}
                   </p>
                 </div>
-                 <button
-                 onClick={checkLengthCart}
-                   
-                                        type="button"
-                                  className="cursor-pointer  text-center w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-full 
+                <button
+                  onClick={checkLengthCart}
+                  type="button"
+                  className="cursor-pointer  text-center w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-full 
              border border-black bg-black transition-colors duration-500 group"
-                                >
-                                  <span className="relative z-10">
-                                    เช็คเอาท์
-                                  </span>
-                                  <span
-                                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+                >
+                  <span className="relative z-10">เช็คเอาท์</span>
+                  <span
+                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
                from-transparent via-white/80 to-transparent 
                skew-x-[-25deg] transition-all duration-700 ease-in-out 
                group-hover:left-[125%]"
-                                  ></span>
-                                </button>
-             
+                  ></span>
+                </button>
               </div>
             </div>
           </div>

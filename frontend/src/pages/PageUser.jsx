@@ -32,7 +32,7 @@ const PageUser = () => {
   const [editMessageUser, setEditMessageUser] = useState(null);
   const [editMessagePassword, setEditMessagePassword] = useState(null);
   const [message, setMessage] = useState(null);
-  // เพิ่ม state สำหรับเก็บค่าชั่วคราว
+
   const [tempName, setTempName] = useState("");
   const [tempLastname, setTempLastname] = useState("");
   const [tempEmail, setTempEmail] = useState("");
@@ -240,21 +240,19 @@ const PageUser = () => {
                                 ยกเลิก
                               </button>
                               <button
-                               onClick={userLogout}
-                                        type="button"
-                                  className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+                                onClick={userLogout}
+                                type="button"
+                                className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
              border border-black bg-black transition-colors duration-500 group"
-                                >
-                                  <span className="relative z-10">
-                                    บันทึก
-                                  </span>
-                                  <span
-                                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+                              >
+                                <span className="relative z-10">บันทึก</span>
+                                <span
+                                  className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
                from-transparent via-white/80 to-transparent 
                skew-x-[-25deg] transition-all duration-700 ease-in-out 
                group-hover:left-[125%]"
-                                  ></span>
-                                </button>
+                                ></span>
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -288,7 +286,7 @@ const PageUser = () => {
                         <div className="flex absolute cursor-pointer bottom-0 rounded-full w-12 h-12 items-center justify-center right-0 gap-2 bg-black ">
                           <FaRegEdit
                             onClick={() => {
-                              setPreview(null); 
+                              setPreview(null);
                               setFile(null);
                               setEditImage(true);
                             }}
@@ -447,7 +445,9 @@ const PageUser = () => {
 
                                       {editMessageUser && (
                                         <>
-                                          <p className="text-md pl-2 font-medium  text-red-500">{editMessageUser}</p>
+                                          <p className="text-md pl-2 font-medium  text-red-500">
+                                            {editMessageUser}
+                                          </p>
                                         </>
                                       )}
                                     </form>
@@ -459,21 +459,22 @@ const PageUser = () => {
                                       >
                                         ยกเลิก
                                       </button>
-                                       <button
-             type="submit"
+                                      <button
+                                        type="submit"
                                         onClick={handleUpdateInfo}
-                  className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+                                        className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
              border border-black bg-black transition-colors duration-500 group"
-                >
-                  <span className="relative z-10">บันทึก</span>
-                  <span
-                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+                                      >
+                                        <span className="relative z-10">
+                                          บันทึก
+                                        </span>
+                                        <span
+                                          className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
                from-transparent via-white/80 to-transparent 
                skew-x-[-25deg] transition-all duration-700 ease-in-out 
                group-hover:left-[125%]"
-                  ></span>
-                </button>
-                                    
+                                        ></span>
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
@@ -580,12 +581,12 @@ const PageUser = () => {
                                         />
                                       </div>
                                       {editMessagePassword && (
-                                    <>
-                                      <p className="text-md pl-2 font-medium  text-red-500">
-                                        {editMessagePassword}
-                                      </p>
-                                    </>
-                                  )}
+                                        <>
+                                          <p className="text-md pl-2 font-medium  text-red-500">
+                                            {editMessagePassword}
+                                          </p>
+                                        </>
+                                      )}
                                     </form>
                                     <div className="flex gap-4  justify-between">
                                       <button
@@ -596,22 +597,21 @@ const PageUser = () => {
                                         ยกเลิก
                                       </button>
                                       <button
-                               onClick={handleUpdatePassword}
+                                        onClick={handleUpdatePassword}
                                         type="submit"
-                                  className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
+                                        className="cursor-pointer w-full relative overflow-hidden font-semibold text-md text-white px-6 py-3 rounded-md 
              border border-black bg-black transition-colors duration-500 group"
-                                >
-                                  <span className="relative z-10">
-                                    บันทึก
-                                  </span>
-                                  <span
-                                    className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
+                                      >
+                                        <span className="relative z-10">
+                                          บันทึก
+                                        </span>
+                                        <span
+                                          className="absolute top-0 left-[-75%] w-1/2 h-full  bg-gradient-to-r 
                from-transparent via-white/80 to-transparent 
                skew-x-[-25deg] transition-all duration-700 ease-in-out 
                group-hover:left-[125%]"
-                                  ></span>
-                                </button>
-                                  
+                                        ></span>
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
@@ -639,7 +639,7 @@ const PageUser = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const [name, setName] = useState("");
   const [lastname, setLastName] = useState("");
@@ -7,45 +7,42 @@ const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     if (name.trim() === "" || lastname.trim() === "" || email.trim() === "") {
- Swal.fire({
-      icon: "warning",
-      title: "ข้อมูลไม่ครบ!",
-      text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
-      confirmButtonText: "ตกลง",
-      buttonsStyling: false,
-      customClass: {
-        confirmButton:
-          "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-      },
-    });
-    return;
-  }
+    if (name.trim() === "" || lastname.trim() === "" || email.trim() === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "ข้อมูลไม่ครบ!",
+        text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+        },
+      });
+      return;
+    }
 
-
-  if (mode === "add" && password.trim() === "") {
-   Swal.fire({
-    icon: "warning",
-    title: "ยังไม่ได้กรอกรหัสผ่าน!",
-    text: "กรุณากรอกรหัสผ่านก่อนดำเนินการต่อ",
-    confirmButtonText: "ตกลง",
-    buttonsStyling: false,
-    customClass: {
-      confirmButton:
-        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-    },
-  });
-    return;
-  }
+    if (mode === "add" && password.trim() === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "ยังไม่ได้กรอกรหัสผ่าน!",
+        text: "กรุณากรอกรหัสผ่านก่อนดำเนินการต่อ",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+        },
+      });
+      return;
+    }
     try {
-  
       const userData =
         mode === "add"
-          ? { name, lastname, email, password } 
-          : { name, lastname, email, role }; 
+          ? { name, lastname, email, password }
+          : { name, lastname, email, role };
 
       await onSubmit(userData);
     } catch (err) {
@@ -59,7 +56,7 @@ const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
       setLastName(selectedData.lastname);
       setEmail(selectedData.email);
       setRole(selectedData.role);
-      setPassword(""); 
+      setPassword("");
     } else {
       setName("");
       setLastName("");
@@ -109,7 +106,6 @@ const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
           />
         </div>
 
-    
         {mode === "edit" && (
           <div className="flex flex-col space-2">
             <label htmlFor="role">สถานะ </label>
@@ -126,7 +122,6 @@ const ModalUserAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
           </div>
         )}
 
-    
         {mode === "add" && (
           <div className="flex flex-col space-2">
             <label htmlFor="password">รหัสผ่าน</label>

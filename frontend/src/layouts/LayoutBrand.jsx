@@ -15,7 +15,7 @@ const LayoutBrand = () => {
           <AllProductBrand />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

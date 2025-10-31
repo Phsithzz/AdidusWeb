@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 const ModalProductAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -50,32 +50,32 @@ const ModalProductAdmin = ({ onClose, mode, onSubmit, selectedData }) => {
       !imageName ||
       !category
     ) {
-   Swal.fire({
-    icon: "warning",
-    title: "ข้อมูลไม่ครบ!",
-    text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
-    confirmButtonText: "ตกลง",
-    buttonsStyling: false,
-    customClass: {
-      confirmButton:
-        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-    },
-  });
+      Swal.fire({
+        icon: "warning",
+        title: "ข้อมูลไม่ครบ!",
+        text: "กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการ",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+        },
+      });
       return;
     }
 
     if (mode === "add" && !file) {
-     Swal.fire({
-    icon: "warning",
-    title: "ไม่มีรูปภาพ!",
-    text: "กรุณาเพิ่มรูปภาพสำหรับสินค้าใหม่ก่อนบันทึกข้อมูล",
-    confirmButtonText: "ตกลง",
-    buttonsStyling: false,
-    customClass: {
-      confirmButton:
-        "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border  hover:text-black hover:border-black transition duration-200",
-    },
-  });
+      Swal.fire({
+        icon: "warning",
+        title: "ไม่มีรูปภาพ!",
+        text: "กรุณาเพิ่มรูปภาพสำหรับสินค้าใหม่ก่อนบันทึกข้อมูล",
+        confirmButtonText: "ตกลง",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border  hover:text-black hover:border-black transition duration-200",
+        },
+      });
       return;
     }
 

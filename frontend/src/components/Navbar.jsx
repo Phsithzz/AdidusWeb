@@ -1,5 +1,5 @@
 import logo from "../assets/logo.png";
-import iconMobile from "../assets/iconMobile.png"
+import iconMobile from "../assets/iconMobile.png";
 import hero1 from "../assets/hero1.svg";
 import hero2 from "../assets/hero2.jpg";
 import hero3 from "../assets/hero3.jpg";
@@ -88,7 +88,6 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     if (!searchTerm) {
-      // ถ้า searchTerm ว่าง ให้ล้างผลลัพธ์
       setResult([]);
       setIsLoading(false);
       return;
@@ -138,14 +137,18 @@ const Navbar = () => {
       navigate("/register");
     }
   };
-console.log(user)
+  console.log(user);
   return (
     <>
       <div className=" bg-black">
         <div className="flex   items-center justify-between p-6">
           <div className="w-[35%]">
             <Link to="/">
-              <img src={logo} alt="Logo" className=" w-15 h-15 cursor-pointer" />
+              <img
+                src={logo}
+                alt="Logo"
+                className=" w-15 h-15 cursor-pointer"
+              />
             </Link>
           </div>
 
@@ -327,7 +330,7 @@ console.log(user)
           </button>
         </div>
       </div>
- 
+
       <div
         className={`fixed top-0 right-0 h-full w-2/4 bg-white text-black z-[999] p-6 transform transition-transform duration-500 ease-in-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
@@ -336,7 +339,7 @@ console.log(user)
         <div className="flex justify-between items-center mb-6">
           <img src={iconMobile} alt="Logo" className="h-20" />
           <IoClose
-          size={40}
+            size={40}
             className=" cursor-pointer"
             onClick={() => setMenuOpen(false)}
           />

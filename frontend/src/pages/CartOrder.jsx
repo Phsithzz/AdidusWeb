@@ -20,7 +20,12 @@ const CartOrder = ({ email }) => {
   }, []);
   return (
     <>
-      {order.map((item) => (
+    {order.length === 0?(
+        <p className="text-center text-black mt-6 text-lg">
+          ยังไม่มีการสั่งซื้อ
+        </p>
+    ):(
+order.map((item) => (
         <>
           <div
             className="w-full min-h-[300px] bg-white rounded-md shadow-md mb-6"
@@ -43,7 +48,7 @@ const CartOrder = ({ email }) => {
                         พัสดุกำลังถูกจัดส่ง
                       </p>
                     </div>
-                    <p className="text-md font-semibold ">สั่งซื้อสำเร็จแล้ว</p>
+                    <p className="text-md font-semibold text-green-400">สั่งซื้อสำเร็จแล้ว</p>
                   </div>
                 </div>
                 <div className="flex justify-between  border-b-2 pb-4 border-gray-300 mt-4 gap-4  p-4">
@@ -127,7 +132,9 @@ const CartOrder = ({ email }) => {
             </div>
           </div>
         </>
-      ))}
+      ))
+    )}
+      
     </>
   );
 };

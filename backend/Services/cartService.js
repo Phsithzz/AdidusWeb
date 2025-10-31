@@ -85,14 +85,35 @@ export const getCartOrder = async (customerEmail) => {
 };
 //เอาไว้ใช้อัพเดทปริมาณสินค้าในตระกร้า
 export const updateCartQuantity = async (cartId, newQuantity) => {
+  // ดึงข้อมูลสินค้าและ variant ของ cart
+  const { rows: cartRows } = await query(
+    `SELECT c.cart_id, c.variant_id, c.quantity, v.stock_quantity
+     FROM cart c
+     JOIN product_variants v ON c.variant_id = v.variant_id
+     WHERE c.cart_id = $1`,
+    [cartId]
+  );
+
+  const cartItem = cartRows[0];
+  if (!cartItem) return null;
+
+  // เช็ค stock
+  if (newQuantity > cartItem.stock_quantity) {
+    return {
+      success: false,
+      message: `มีสินค้าใน stock เพียง ${cartItem.stock_quantity} ชิ้นเท่านั้น`,
+    };
+  }
+
+  // อัปเดตจำนวนใน cart
   const { rows } = await query(
-    `
-        UPDATE cart SET quantity = $1 WHERE cart_id = $2 RETURNING*
-        `,
+    `UPDATE cart SET quantity = $1 WHERE cart_id = $2 RETURNING*`,
     [newQuantity, cartId]
   );
-  return rows || null;
+
+  return { success: true, updatedCart: rows[0] };
 };
+
 
 //เอาไว้อัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
 export const confirmCart = async (customerEmail, addressId, paymentMethod) => {

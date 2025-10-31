@@ -49,24 +49,51 @@
       }
     }, [login, email]);
 
-    const handleUpdateQuantity = async (cartId, newQuantity) => {
-      if (newQuantity < 1) {
-        return handleDelete(cartId);
-      }
-      const originalCarts = [...carts];
-      setCarts((prevCarts) =>
-        prevCarts.map((item) =>
-          item.cart_id === cartId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-      try {
-        await cart.updateCartQuantity(cartId, newQuantity);
-      } catch (err) {
-        console.log(err);
-        setCarts(originalCarts);
-        alert("อัปเดตจำนวนไม่สำเร็จ โปรดลองอีกครั้ง");
-      }
-    };
+ const handleUpdateQuantity = async (cartId, newQuantity) => {
+  const maxQuantity = 5; 
+
+  if (newQuantity < 1) {
+    return handleDelete(cartId);
+  }
+
+  if (newQuantity > maxQuantity) {
+    Swal.fire({
+      icon: "warning",
+      title: "จำนวนสินค้าเกินขีดจำกัด",
+      text: `สินค้าในStockหมด`,
+      confirmButtonText: "ตกลง",
+      customClass: {
+        confirmButton: "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+      },
+    });
+    return; 
+  }
+
+  const originalCarts = [...carts];
+  setCarts((prev) =>
+    prev.map((item) =>
+      item.cart_id === cartId ? { ...item, quantity: newQuantity } : item
+    )
+  );
+
+  try {
+    await cart.updateCartQuantity(cartId, newQuantity);
+  } catch (err) {
+    console.log(err);
+    setCarts(originalCarts);
+    Swal.fire({
+      icon: "error",
+      title: "อัปเดตจำนวนไม่สำเร็จ",
+      text: "โปรดลองอีกครั้ง",
+      confirmButtonText: "ตกลง",
+      customClass: {
+        confirmButton: "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
+      },
+    });
+  }
+};
+
+
     const handleDelete = async (cartId) => {
       try {
         await cart.removeCart(cartId);

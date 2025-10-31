@@ -114,7 +114,6 @@ export const updateCartQuantity = async (cartId, newQuantity) => {
   return { success: true, updatedCart: rows[0] };
 };
 
-
 //เอาไว้อัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
 export const confirmCart = async (customerEmail, addressId, paymentMethod) => {
   await query("BEGIN");
@@ -204,13 +203,13 @@ export const getAllCart = async () => {
 };
 
 export const updateCart = async (cartId, cartData) => {
-  const { customer_email, variant_id, quantity, price ,status} = cartData;
+  const { customer_email, variant_id, quantity, price, status } = cartData;
   const { rows } = await query(
     `
         UPDATE cart SET customer_email=$1,variant_id=$2,quantity=$3,price=$4,status=$5
         WHERE cart_id=$6 RETURNING*
         `,
-    [customer_email, variant_id, quantity, price,status, cartId]
+    [customer_email, variant_id, quantity, price, status, cartId]
   );
   return rows[0];
 };

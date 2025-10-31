@@ -94,35 +94,31 @@ export const getCartOrder = async(req,res)=>{
     }
 }
 //เอาไว้ใช้อัพเดทปริมาณสินค้าในตระกร้า
-export const updateCartQuantity = async (req, res) => {
-  try {
-    const { cartId } = req.params;
-    const { newQuantity } = req.body;
+export const updateCartQuantity = async(req,res)=>{
+    console.log("PUT /cart/:cartId")
+    try {
+        const {cartId} = req.params
+        const {newQuantity} = req.body
 
-    if (newQuantity == null || newQuantity < 1) {
-      return res.status(400).json({ message: "Invalid quantity" });
+        if(newQuantity == null || newQuantity < 1){
+            return res.status(400).json({message:"Invalid quantity"})
+        }
+
+        const updateCart  = await cartService.updateCartQuantity(cartId,newQuantity)
+        if(!updateCart){
+            return res.status(404).json({message:"Cart item not found"})
+        }
+        res.status(200).json(updateCart)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message:"Server error updataCartQuantity",
+            error:err.message
+        })
+        
     }
-
-    const result = await cartService.updateCartQuantity(cartId, newQuantity);
-
-    if (!result) {
-      return res.status(404).json({ message: "Cart item not found" });
-    }
-
-    if (!result.success) {
-      return res.status(400).json({ message: result.message });
-    }
-
-    res.status(200).json(result.updatedCart);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Server error updateCartQuantity",
-      error: err.message,
-    });
-  }
-};
-
+}
 
 //เอาไว้ออัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
 export const confirmCart = async(req,res)=>{

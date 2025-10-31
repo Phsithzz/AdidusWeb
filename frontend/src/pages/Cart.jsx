@@ -49,60 +49,24 @@
       }
     }, [login, email]);
 
- const handleUpdateQuantity = async (cartId, newQuantity) => {
-  if (newQuantity < 1) {
-    return handleDelete(cartId);
-  }
-
-  const originalCarts = [...carts];
-
-  // Optimistic update
-  setCarts((prevCarts) =>
-    prevCarts.map((item) =>
-      item.cart_id === cartId ? { ...item, quantity: newQuantity } : item
-    )
-  );
-
-  try {
-    const res = await cart.updateCartQuantity(cartId, newQuantity);
-
-  
-    if (res.status === 400) {
-      const data = await res.json();
-      Swal.fire({
-        icon: "error",
-        title: "จำนวนสินค้าเกิน stock",
-        text: data.message,
-        confirmButtonText: "ตกลง",
-        customClass: {
-          confirmButton: "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-        },
-      });
-      setCarts(originalCarts); 
-      return;
-    }
-
-  
-    const updatedCart = await res.json();
-    setCarts((prevCarts) =>
-      prevCarts.map((item) =>
-        item.cart_id === cartId ? updatedCart : item
-      )
-    );
-  } catch (err) {
-    console.log(err);
-    setCarts(originalCarts);
-    Swal.fire({
-      icon: "error",
-      title: "อัปเดตจำนวนไม่สำเร็จ",
-      text: "โปรดลองอีกครั้ง",
-      confirmButtonText: "ตกลง",
-      customClass: {
-        confirmButton: "cursor-pointer bg-black text-white px-5 py-2 border rounded-md border-white hover:bg-white hover:border hover:text-black hover:border-black transition duration-200",
-      },
-    });
-  }
-};
+    const handleUpdateQuantity = async (cartId, newQuantity) => {
+      if (newQuantity < 1) {
+        return handleDelete(cartId);
+      }
+      const originalCarts = [...carts];
+      setCarts((prevCarts) =>
+        prevCarts.map((item) =>
+          item.cart_id === cartId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+      try {
+        await cart.updateCartQuantity(cartId, newQuantity);
+      } catch (err) {
+        console.log(err);
+        setCarts(originalCarts);
+        alert("อัปเดตจำนวนไม่สำเร็จ โปรดลองอีกครั้ง");
+      }
+    };
     const handleDelete = async (cartId) => {
       try {
         await cart.removeCart(cartId);
@@ -189,7 +153,7 @@
                           />
                         </Link>
 
-                        <div className="flex justify-between w-full items-center gap-4">
+                        <div className="flex justify-between items-center gap-4">
                           <div className="flex gap-4 items-center border border-gray-200 px-2 rounded-full">
                             <button
                               onClick={() =>
@@ -217,7 +181,7 @@
                               <FaPlus />
                             </button>
                           </div>
-                          <div className="flex gap-4 items-center ">
+                          <div className="flex gap-4 items-center">
                             <RiDeleteBinLine
                               onClick={() => handleDelete(cart.cart_id)}
                               className=" cursor-pointer hover:text-red-700 text-xl"

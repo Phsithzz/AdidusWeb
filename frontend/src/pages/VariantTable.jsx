@@ -2,7 +2,7 @@ import { deleteVariant } from "../function/variant.js";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { useState } from "react";
-const VariantTable = ({
+const   VariantTable = ({
   handleOpen,
   searchTerm,
   tableData,

@@ -85,6 +85,7 @@ const PageUser = () => {
     setTempName(name);
     setTempLastname(lastname);
     setTempEmail(email);
+    setEditMessageUser(null);
     setEditUser(true);
   };
 
@@ -104,7 +105,7 @@ const PageUser = () => {
       setName(tempName);
       setLastname(tempLastname);
       setEmail(tempEmail);
-
+      setEditMessageUser("อัปเดตข้อมูลสำเร็จ ✅");
       setEditUser(false);
     } catch (err) {
       console.log(err);

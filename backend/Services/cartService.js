@@ -115,12 +115,16 @@ export const updateCartQuantity = async (cartId, newQuantity) => {
 };
 
 //เอาไว้อัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
+//เอาไว้อัพเดต Status ของตะกร้า เมื่อผู้ใช้กดซื้อและชำระเงินสำเร็จ แล้วเพิ่มข้อมูลลงtable orders
 export const confirmCart = async (customerEmail, addressId, paymentMethod) => {
   await query("BEGIN");
 
   try {
     const cartRes = await query(
-      "SELECT * FROM cart WHERE customer_email=$1 AND status = false",
+      `SELECT c.*, v.product_id 
+       FROM cart c
+       JOIN product_variants v ON c.variant_id = v.variant_id
+       WHERE c.customer_email = $1 AND c.status = false`,
       [customerEmail]
     );
 
@@ -136,27 +140,43 @@ export const confirmCart = async (customerEmail, addressId, paymentMethod) => {
 
     const orderRes = await query(
       `INSERT INTO orders(customer_email,total_price,status,address_id,payment_method)
-                VALUES($1,$2,true,$3,$4) RETURNING*
-            `,
+           VALUES($1,$2,true,$3,$4) RETURNING*
+          `,
       [customerEmail, totalPrice, addressId, paymentMethod]
     );
     const orderId = orderRes.rows[0].order_id;
 
     await query(
       `UPDATE cart SET status=true ,order_id=$1 
-            WHERE customer_email=$2 AND status=false`,
+           WHERE customer_email=$2 AND status=false`,
       [orderId, customerEmail]
     );
 
+    // --- [!] จุดแก้ไขสำคัญอยู่ตรงนี้ ---
     for (let item of cartRes.rows) {
-      await query(
+      
+      // 1. ลองอัปเดตสต็อก โดยมีเงื่อนไขว่าสต็อกต้องพอ
+      const updateRes = await query(
         `
-                UPDATE product_variants
-                SET stock_quantity = stock_quantity-$1
-                WHERE product_id=$2 AND variant_id=$3`,
-        [item.quantity, item.product_id, item.variant_id]
+          UPDATE product_variants
+          SET stock_quantity = stock_quantity - $1
+          WHERE variant_id = $2 AND stock_quantity >= $1
+        `,
+        // [!] $1 = item.quantity, $2 = item.variant_id
+        [item.quantity, item.variant_id] 
       );
 
+      // 2. เช็คว่าการอัปเดตสำเร็จหรือไม่
+      if (updateRes.rowCount === 0) {
+        // ถ้า rowCount เป็น 0 แปลว่า WHERE ไม่สำเร็จ (สต็อกไม่พอ)
+        // เราจะโยน Error เพื่อบังคับให้ Transaction Rollback
+        throw new Error(
+          `สินค้า (Variant ID: ${item.variant_id}) มีสต็อกไม่เพียงพอ`
+        );
+      }
+      
+      // 3. ถ้าอัปเดต variant สำเร็จ ค่อยอัปเดตสต็อกรวมใน products
+      // (โค้ดส่วนนี้ของคุณถูกต้องแล้ว)
       await query(
         `UPDATE products
          SET stock_quantity = (
@@ -168,13 +188,14 @@ export const confirmCart = async (customerEmail, addressId, paymentMethod) => {
         [item.product_id]
       );
     }
+    // --- สิ้นสุดจุดแก้ไข ---
 
     await query("COMMIT");
     return orderRes.rows[0];
   } catch (err) {
     await query("ROLLBACK");
-    console.log(err);
-    throw err;
+    console.log("Transaction Rolled Back:", err.message); // แสดง Error ที่เราโยน
+    throw err; // โยน Error ต่อไปให้ Controller (ถ้าจำเป็น)
   }
 };
 

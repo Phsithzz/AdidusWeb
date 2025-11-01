@@ -28,7 +28,7 @@ const CartOrder = ({ email }) => {
 order.map((item) => (
         <>
           <div
-            className="w-full min-h-[300px] bg-white rounded-md shadow-md mb-6"
+            className="w-full min-h-[300px] bg-white border border-gray-200 rounded-md shadow-md mb-6"
             key={item.cart_id}
           >
             <div className="max-w-5xl mx-auto p-6  rounded-md">
@@ -46,6 +46,9 @@ order.map((item) => (
                       />
                       <p className="text-md font-semibold text-green-400">
                         พัสดุกำลังถูกจัดส่ง
+                      </p>
+                      <p className="text-md font-semibold text-green-400">
+                        หมายเลขพัสดุ {item.cart_id}
                       </p>
                     </div>
                     <p className="text-md font-semibold text-green-400">สั่งซื้อสำเร็จแล้ว</p>
@@ -96,19 +99,23 @@ order.map((item) => (
                         {item.house_number}
                       </p>
                       <p className="font-medium text-sm flex gap-2">
-                        <span className="font-semibold">บ้านเลขที่:</span>
+                        <span className="font-semibold">หมู่ที่:</span>
                         {item.village_number}
                       </p>
                       <p className="font-medium text-sm flex gap-2">
-                        <span className="font-semibold">บ้านเลขที่:</span>
+                        <span className="font-semibold">ตำบล:</span>
                         {item.subdistrict}
                       </p>
                       <p className="font-medium text-sm flex gap-2">
-                        <span className="font-semibold">บ้านเลขที่:</span>
+                        <span className="font-semibold">อำเภอ:</span>
+                        {item.district}
+                      </p>
+                      <p className="font-medium text-sm flex gap-2">
+                        <span className="font-semibold">จังหวัด:</span>
                         {item.province}
                       </p>
                       <p className="font-medium text-sm flex gap-2">
-                        <span className="font-semibold">บ้านเลขที่:</span>
+                        <span className="font-semibold">รหัสไปรษณีย์:</span>
                         {item.postal_code}
                       </p>
                     </div>

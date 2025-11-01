@@ -104,7 +104,7 @@ const PageUser = () => {
       setName(tempName);
       setLastname(tempLastname);
       setEmail(tempEmail);
-      setEditMessageUser("อัปเดตข้อมูลสำเร็จ ✅");
+
       setEditUser(false);
     } catch (err) {
       console.log(err);
@@ -181,7 +181,7 @@ const PageUser = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#EEEEEE] w-full min-h-screen">
+      <div className="bg-white w-full min-h-screen">
         <div className="max-w-7xl mx-auto p-10 ">
           <div className="flex gap-4  justify-between">
             <div className="flex flex-col space-y-8 w-[25%] ">

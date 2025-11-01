@@ -37,35 +37,9 @@ export const getProductAdmin = async () => {
   return rows;
 };
 
-// export const updateProduct = async (productId, productData) => {
-//   const {
-//     name,
-//     description,
-//     price,
-//     stock_quantity,
-//     image_filename,
-//     brand,
-//     category_name,
-//     detail
-//   } = productData;
-//   const { rows } = await query(
-//     "UPDATE products SET name=$1,description=$2,price=$3,stock_quantity=$4,image_filename=$5,brand=$6,category_name=$7,detail=$8 WHERE product_id=$9 RETURNING*",
-//     [
-//       name,
-//       description,
-//       price,
-//       stock_quantity,
-//       image_filename,
-//       brand,
-//       category_name,
-//       detail,
-//       productId,
-//     ]
-//   );
-//   return rows[0];
-// };
+
 export const updateProduct = async (productId, productData) => {
-  // ดึงข้อมูลเดิม
+  
   const { rows: existingRows } = await query(
     "SELECT * FROM products WHERE product_id=$1",
     [productId]
@@ -75,7 +49,7 @@ export const updateProduct = async (productId, productData) => {
 
   const existingProduct = existingRows[0];
 
-  // ใช้ค่าเดิมถ้าไม่ได้ส่งมา
+  
   const name = productData.name ?? existingProduct.name;
   const description = productData.description ?? existingProduct.description;
   const price = productData.price ?? existingProduct.price;
@@ -108,7 +82,7 @@ export const searchProduct = async (searchTerm) => {
   return rows;
 };
 
-//Admin use
+//Admin use end
 
 export const getProduct = async () => {
   const { rows } = await query("SELECT * FROM products ORDER BY brand ASC, name ASC");

@@ -12,7 +12,7 @@ import multer from "multer"
 dotenv.config();
 
 // upload part
-// กำหนดตำแหน่งที่จะเก็บ file ที่ upload --> img_users
+// กำหนดตำแหน่งที่จะเก็บ file ที่ upload img_users
 const storage = multer.diskStorage({
   destination:function(req,file,cb){
     cb(null,"img_users")
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
   }
 })
-// จำกัดประเภทของไฟล์ที่อัปโหลด
+
 const upload = multer({
     storage: storage,
 }).single('file');

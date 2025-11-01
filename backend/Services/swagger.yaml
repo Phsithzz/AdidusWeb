@@ -668,6 +668,7 @@ paths:
               properties:
                 name: { type: string }
                 lastname: { type: string }
+                email: { type: string}
       responses:
         '200':
           description: แก้ไขข้อมูลสำเร็จ

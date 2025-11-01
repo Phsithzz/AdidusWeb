@@ -5,7 +5,7 @@ import path from "path";
 //C R U D
 
 // upload part
-// กำหนดตำแหน่งที่จะเก็บ file ที่ upload --> img_users
+// กำหนดตำแหน่งที่จะเก็บ file ที่ upload  img_users
   const storage = multer.diskStorage({
     destination:function(req,file,cb){
       cb(null,"img_products")
@@ -16,20 +16,13 @@ import path from "path";
 
     }
   })
-// จำกัดประเภทของไฟล์ที่อัปโหลด
+
 export const upload = multer({
     storage: storage,
 }).single('image');
 
 
-//ส่วน Upload File
-// export const uploadUser = async(req,res)=>{
-//   console.log("Upload User Image")
-//   upload(req,res,(err)=>{
-//     if(err) return res.status(400).json({message:err.message})
-//     res.status(200).json({message:"File uploaded successfully"})
-//   })
-// }
+
 //Admin use
 export const createProduct = async (req, res) => {
   console.log("POST /products is request")
@@ -88,7 +81,7 @@ export const updateProduct = async (req, res) => {
     let oldFilename = req.body.existingImage;
     let newFilename = req.body.image_filename;
 
-    // 1️ ถ้ามีการอัปโหลดไฟล์ใหม่ — ก็ใช้ชื่อจากไฟล์นั้นเลย
+ 
     if (req.file) {
       productData.image_filename = req.file.filename.replace(/\.[^/.]+$/, "");
     }
@@ -112,7 +105,7 @@ export const updateProduct = async (req, res) => {
       productData.image_filename = newFilename;
     }
 
-    // 3️⃣ ถ้าไม่ได้เปลี่ยนชื่อเลย
+    // 3️ ถ้าไม่ได้เปลี่ยนชื่อเลย
     else if (oldFilename) {
       productData.image_filename = oldFilename;
     }

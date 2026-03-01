@@ -113,7 +113,7 @@ const Footer = () => {
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
                 <FiUser size={25} />
-                <p className="text-lg font-semibold">phoosith.p@ku.th</p>
+                <p className="text-lg font-semibold">chayakorn.p@ku.th</p>
               </div>
               <div className="flex items-center gap-3">
                 <FiUser size={25} />

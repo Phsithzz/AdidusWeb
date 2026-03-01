@@ -1,6 +1,11 @@
-# SeriousP
+<h1 align="center">✨ Adidus Sneaker E-commerce Platform ✨</h1>
+
+![Demo App](/frontend/public/adidus.png)
 
 Adidus is a full-stack web application sample that demonstrates a product catalog, shopping cart, order management, and user authentication. It pairs a Node.js + Express backend with a React frontend built on Vite.
+
+## 🌐 Live Demo Youtube
+🔗 View the app online: [https://www.youtube.com/watch?v=JNIvrwGOgtM]
 
 ## Project Overview
 

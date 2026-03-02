@@ -53,7 +53,7 @@ DB_NAME=your_db_name
 JWT_SECRET=your_jwt_secret
 ```
 
-3. Run the backend in development (uses nodemon):
+4. Run the backend in development (uses nodemon):
 
 ```bash
 npm run dev

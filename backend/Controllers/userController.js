@@ -114,7 +114,7 @@ export const login = async (req, res) => {
     };
     resetLoginRateLimit(req.ip);
     setSessionCookie(req, res, publicUser);
-    return res.status(200).json({ message: "Login Success", login: true, user: publicUser });
+    return res.status(200).json({ message: "Login Success", login: true, user: publicUser, token: tokenFor(user) });
   } catch (error) {
     console.error("login failed", error);
     return res.status(500).json({ message: "Unable to login", login: false });

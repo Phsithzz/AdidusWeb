@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { PageSkeleton } from "./components/Skeleton.jsx";
 
 const LayoutHome = lazy(() => import("./layouts/LayoutHome.jsx"));
 const HomeProduct = lazy(() => import("./components/HomeProduct.jsx"));
@@ -22,11 +23,11 @@ const LayoutAdminUser = lazy(() => import("./layouts/LayoutAdminUser.jsx"));
 const LayoutAdminCart = lazy(() => import("./layouts/LayoutAdminCart.jsx"));
 const LayoutAdminOrder = lazy(() => import("./layouts/LayoutAdminOrder.jsx"));
 
-const Loading = () => <div className="p-8 text-center text-gray-600">Loading...</div>;
+
 
 const App = () => (
   <BrowserRouter>
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<PageSkeleton />}>
       <Routes>
         <Route path="/" element={<LayoutHome />}>
           <Route index element={<HomeProduct />} />

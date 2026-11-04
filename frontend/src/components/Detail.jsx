@@ -14,7 +14,15 @@ const Detail = ({ onCancel }) => {
     loadData();
   }, [id]);
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) {
+    return (
+      <div className="m-30 w-full max-w-3xl bg-white rounded-4xl shadow-2xl mx-auto overflow-hidden p-8 animate-pulse space-y-4">
+        <div className="h-8 w-1/2 bg-gray-200 rounded"></div>
+        <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+        <div className="h-32 w-full bg-gray-200 rounded-xl"></div>
+      </div>
+    );
+  }
   return (
     <>
       <div className="m-30 w-full max-w-3xl bg-white rounded-4xl shadow-2xl mx-auto overflow-hidden">

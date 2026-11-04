@@ -148,7 +148,10 @@ const Cart = () => {
     return (
       <>
         <div className="container mx-auto mt-6 text-center text-gray-600">
-          <p>Loading cart...</p>
+          <div className="max-w-5xl mx-auto space-y-4 animate-pulse">
+            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-24 bg-gray-200 rounded-xl"></div>
+          </div>
         </div>
       </>
     );

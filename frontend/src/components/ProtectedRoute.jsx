@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { getUser } from "../function/user.js";
+import { PageSkeleton } from "./Skeleton.jsx";
 
 const ProtectedRoute = ({ role }) => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ role }) => {
   }, []);
 
   if (session.loading) {
-    return <div className="p-8 text-center text-gray-600">Loading...</div>;
+    return <PageSkeleton />;
   }
   if (!session.user?.login) {
     return <Navigate to="/login" replace state={{ from: location }} />;

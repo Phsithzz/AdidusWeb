@@ -3,17 +3,22 @@ import Slider from "react-slick";
 import { getProduct } from "../function/product.js";
 import { Link } from "react-router-dom";
 import { LuMousePointerClick } from "react-icons/lu";
+
 const SlideProduct = () => {
   const [showProduct, setShowProduct] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
         const res = await getProduct();
         setShowProduct(RandomProduct(res.data));
-
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
@@ -25,7 +30,8 @@ const SlideProduct = () => {
       .sort((a, b) => a[0] - b[0])
       .map((a) => a[1]);
   };
-  var settings = {
+
+  const settings = {
     dots: false,
     arrows: true,
     infinite: true,
@@ -54,17 +60,35 @@ const SlideProduct = () => {
       },
     ],
   };
+
   return (
-    <>
-      <div className="max-w-7xl mx-auto mt-8 px-4 md:px-8 mb-20">
-        <h1 className="text-2xl font-bold text-left">สินค้าที่คุณอาจสนใจ</h1>
-        <div className="mt-4 ">
-          <Slider {...settings} className="w-full   px-14">
+    <div className="max-w-7xl mx-auto mt-8 px-4 md:px-8 mb-20">
+      <h1 className="text-2xl font-bold text-left">สินค้าที่คุณอาจสนใจ</h1>
+      <div className="mt-4">
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex flex-col border border-gray-100 rounded-xl bg-white shadow-md p-4 space-y-3 animate-pulse"
+              >
+                <div className="w-full h-52 bg-gray-200 rounded-lg"></div>
+                <div className="h-5 w-24 bg-gray-200 rounded"></div>
+                <div className="h-6 w-3/4 bg-gray-200 rounded"></div>
+                <div className="h-4 w-1/3 bg-gray-200 rounded"></div>
+                <div className="flex justify-between items-center pt-2">
+                  <div className="h-6 w-20 bg-gray-200 rounded"></div>
+                  <div className="h-8 w-24 bg-gray-200 rounded-lg"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Slider {...settings} className="w-full px-14">
             {showProduct.map((show) => (
-              <Link to={`/products/${show.product_id}`}>
+              <Link key={show.product_id} to={`/products/${show.product_id}`}>
                 <div
-                  className="flex flex-col  border border-white hover:border-black transition-all ease-in space-y-2 p-4 cursor-pointer"
-                  key={show.product_id}
+                  className="flex flex-col border border-white hover:border-black transition-all ease-in space-y-2 p-4 cursor-pointer"
                 >
                   <div className="flex justify-center items-center">
                     <img
@@ -89,16 +113,10 @@ const SlideProduct = () => {
                         }).format(show.price)}
                       </p>
                       <div className="flex flex-wrap items-center gap-4">
-                        <Link to={`/products/${show.product_id}`}>
-                          <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
-                            <span>View Detail</span>
-                            <LuMousePointerClick className="text-xl" />
-                          </button>
-                        </Link>
-                        {/* <button className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
-                          <BsCartPlus className="text-xl" />
-                          <span>Add to Cart</span>
-                        </button> */}
+                        <span className="flex items-center text-xs rounded-lg bg-black gap-2 hover:text-black shadow-2xl hover:border transition-all ease-in duration-200 cursor-pointer font-medium hover:bg-white text-white p-2">
+                          <span>View Detail</span>
+                          <LuMousePointerClick className="text-xl" />
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -106,9 +124,9 @@ const SlideProduct = () => {
               </Link>
             ))}
           </Slider>
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === "production" && process.env.SECRET_KEY.length < 32)
 const developmentOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
 const allowedOrigins = (process.env.CORS_ORIGINS || developmentOrigins.join(","))
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ""))
   .filter(Boolean);
 const cookieSecure =
   process.env.COOKIE_SECURE === "true" ||

@@ -12,6 +12,7 @@ import { RxCross2 } from "react-icons/rx";
 import { FaCheckCircle } from "react-icons/fa";
 import SizeShoe from "../components/SizeShoe.jsx";
 import Swal from "sweetalert2";
+import { ProductDetailSkeleton } from "../components/Skeleton.jsx";
 const shipping = [
   {
     id: 1,
@@ -152,7 +153,7 @@ const ProductDetail = () => {
     }
   };
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) return <ProductDetailSkeleton />;
 
   return (
     <>
